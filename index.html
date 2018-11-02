@@ -279,6 +279,185 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="/2018/11/02/关于Openresty的一些事情/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ideath@operatorworld.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ewkoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/02/关于Openresty的一些事情/" itemprop="url">
+                  关于Openresty的一些事情
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-02 17:46:30 / 修改时间：18:12:58" itemprop="dateCreated datePublished" datetime="2018-11-02T17:46:30+08:00">2018-11-02</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。"><a href="#在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。" class="headerlink" title="在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。"></a>在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。</h3><ul>
+<li><p>把一些状态存储在lua的对象中，在收到请求的时候把对象内的值修改。这个操蛋的做法有什么问题？</p>
+<ol>
+<li><p>这么做，当前你只有一个nginx工作进程，并且lua_code_cache on;的时候，居然是可以用的。</p>
+</li>
+<li><p>并且在Window环境下，你会发现大部分情况都是居然可以用的。</p>
+</li>
+<li><p>在多个进程的情况下，你处理请求的进程只是其中一个，在修改对应的变量的时候，只会修改掉接收到请求的进程中的Lua对象值。这个时候就会出现，有的请求返回的值是正确的，有的不正确。</p>
+</li>
+<li><p>在代码缓存是off的时候，每次都会去重新载入代码文件，行为也会存在问题。</p>
+<blockquote>
+<p>所以针对可变的配置内容，不要写在lua文件中，nginx在尝试写入文件的时候，往往都会遇到权限问题，导致不能更新，因此对于动态配置的信息，存储到redis或者其它数据库中。如果实在不想加入数据库。那么可以存储到nginx的共享内存中去。</p>
+</blockquote>
+</li>
+</ol>
+</li>
+<li><p>在Window下ngx.worker.id()的值都是0值。</p>
+<ol>
+<li><p>如果定时任务，只在一个进程中执行即可，如果多个进程会导致多次执行。</p>
+<blockquote>
+<p>第一版本：</p>
+</blockquote>
+</li>
+<li><p>在共享内存中存储pid的标志位，只有第一个设置共享内存的进程执行后续的定时任务。后续的进行运行到此代码的时候，获取pid标志位存在的，就退出，这个也是有毛病的。</p>
+</li>
+<li><p>因为当我们去执行nginx -s reload的时候，共享内存的值是存在的，这个就会导致定时任务后续就不再执行了。</p>
+<blockquote>
+<p>第二版本：</p>
+</blockquote>
+</li>
+<li><p>因此nginx的多个进程启动的速度是比较快的。通过设置一个时间到共享内存中。通过判断时间间隔小于5秒的值全部退出掉。</p>
+<blockquote>
+<p>第三版本:</p>
+</blockquote>
+</li>
+<li><p>没有了，如果有希望大神发个邮件给我，在此先感谢了。</p>
+</li>
+</ol>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="/2018/11/02/Lua编译/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1200,7 +1379,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

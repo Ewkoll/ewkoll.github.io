@@ -108,24 +108,24 @@
 
 
 
-  <meta name="description" content="在通过MakeDown显示表格效果的时候，当内容存在“|”符号，这个时候需要通过&amp;amp;#124来进行替换 例如：2018-10-31 耗时统计结果  1234| 服务名称 | 应用名称 | 类型 | TRACEID | 消耗时间 || ------- | ------- | ---- | ------- | ------- || /admin_api&amp;amp;#124;app.get_read">
+  <meta name="description" content="在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。 把一些状态存储在lua的对象中，在收到请求的时候把对象内的值修改。这个操蛋的做法有什么问题？  这么做，当前你只有一个nginx工作进程，并且lua_code_cache on;的时候，居然是可以用的。  并且在Window环境下，你会发现大部分情况都是居然可以用的。  在多个进程的情况下，你处理请求的进程只是其中一个，在修">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MakeDown竖线转义符号">
-<meta property="og:url" content="/2018/10/31/MakeDown竖线转义符号/index.html">
+<meta property="og:title" content="关于Openresty的一些事情">
+<meta property="og:url" content="/2018/11/02/关于Openresty的一些事情/index.html">
 <meta property="og:site_name" content="Ewkoll">
-<meta property="og:description" content="在通过MakeDown显示表格效果的时候，当内容存在“|”符号，这个时候需要通过&amp;amp;#124来进行替换 例如：2018-10-31 耗时统计结果  1234| 服务名称 | 应用名称 | 类型 | TRACEID | 消耗时间 || ------- | ------- | ---- | ------- | ------- || /admin_api&amp;amp;#124;app.get_read">
+<meta property="og:description" content="在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。 把一些状态存储在lua的对象中，在收到请求的时候把对象内的值修改。这个操蛋的做法有什么问题？  这么做，当前你只有一个nginx工作进程，并且lua_code_cache on;的时候，居然是可以用的。  并且在Window环境下，你会发现大部分情况都是居然可以用的。  在多个进程的情况下，你处理请求的进程只是其中一个，在修">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-10-31T07:24:44.372Z">
+<meta property="og:updated_time" content="2018-11-02T10:12:58.650Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MakeDown竖线转义符号">
-<meta name="twitter:description" content="在通过MakeDown显示表格效果的时候，当内容存在“|”符号，这个时候需要通过&amp;amp;#124来进行替换 例如：2018-10-31 耗时统计结果  1234| 服务名称 | 应用名称 | 类型 | TRACEID | 消耗时间 || ------- | ------- | ---- | ------- | ------- || /admin_api&amp;amp;#124;app.get_read">
+<meta name="twitter:title" content="关于Openresty的一些事情">
+<meta name="twitter:description" content="在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。 把一些状态存储在lua的对象中，在收到请求的时候把对象内的值修改。这个操蛋的做法有什么问题？  这么做，当前你只有一个nginx工作进程，并且lua_code_cache on;的时候，居然是可以用的。  并且在Window环境下，你会发现大部分情况都是居然可以用的。  在多个进程的情况下，你处理请求的进程只是其中一个，在修">
 
 
 
 
 
 
-  <link rel="canonical" href="/2018/10/31/MakeDown竖线转义符号/">
+  <link rel="canonical" href="/2018/11/02/关于Openresty的一些事情/">
 
 
 
@@ -135,7 +135,7 @@
   };
 </script>
 
-  <title>MakeDown竖线转义符号 | Ewkoll</title>
+  <title>关于Openresty的一些事情 | Ewkoll</title>
   
 
 
@@ -282,7 +282,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="/2018/10/31/MakeDown竖线转义符号/">
+    <link itemprop="mainEntityOfPage" href="/2018/11/02/关于Openresty的一些事情/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ideath@operatorworld.com">
@@ -299,7 +299,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">MakeDown竖线转义符号
+          <h1 class="post-title" itemprop="name headline">关于Openresty的一些事情
               
             
           </h1>
@@ -324,7 +324,7 @@
                 
               
 
-              <time title="创建时间：2018-10-31 13:54:32 / 修改时间：15:24:44" itemprop="dateCreated datePublished" datetime="2018-10-31T13:54:32+08:00">2018-10-31</time>
+              <time title="创建时间：2018-11-02 17:46:30 / 修改时间：18:12:58" itemprop="dateCreated datePublished" datetime="2018-11-02T17:46:30+08:00">2018-11-02</time>
             
 
             
@@ -362,10 +362,47 @@
       
 
       
-        <h3 id="在通过MakeDown显示表格效果的时候，当内容存在“-”符号，这个时候需要通过-amp-124来进行替换"><a href="#在通过MakeDown显示表格效果的时候，当内容存在“-”符号，这个时候需要通过-amp-124来进行替换" class="headerlink" title="在通过MakeDown显示表格效果的时候，当内容存在“|”符号，这个时候需要通过&amp;#124来进行替换"></a>在通过MakeDown显示表格效果的时候，当内容存在“|”符号，这个时候需要通过<font color="#FF0000" size="3" face="微软雅黑">&amp;#124</font>来进行替换</h3><ul>
-<li>例如：<h4 id="2018-10-31-耗时统计结果"><a href="#2018-10-31-耗时统计结果" class="headerlink" title="2018-10-31 耗时统计结果"></a>2018-10-31 耗时统计结果</h4></li>
+        <h3 id="在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。"><a href="#在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。" class="headerlink" title="在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。"></a>在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。</h3><ul>
+<li><p>把一些状态存储在lua的对象中，在收到请求的时候把对象内的值修改。这个操蛋的做法有什么问题？</p>
+<ol>
+<li><p>这么做，当前你只有一个nginx工作进程，并且lua_code_cache on;的时候，居然是可以用的。</p>
+</li>
+<li><p>并且在Window环境下，你会发现大部分情况都是居然可以用的。</p>
+</li>
+<li><p>在多个进程的情况下，你处理请求的进程只是其中一个，在修改对应的变量的时候，只会修改掉接收到请求的进程中的Lua对象值。这个时候就会出现，有的请求返回的值是正确的，有的不正确。</p>
+</li>
+<li><p>在代码缓存是off的时候，每次都会去重新载入代码文件，行为也会存在问题。</p>
+<blockquote>
+<p>所以针对可变的配置内容，不要写在lua文件中，nginx在尝试写入文件的时候，往往都会遇到权限问题，导致不能更新，因此对于动态配置的信息，存储到redis或者其它数据库中。如果实在不想加入数据库。那么可以存储到nginx的共享内存中去。</p>
+</blockquote>
+</li>
+</ol>
+</li>
+<li><p>在Window下ngx.worker.id()的值都是0值。</p>
+<ol>
+<li><p>如果定时任务，只在一个进程中执行即可，如果多个进程会导致多次执行。</p>
+<blockquote>
+<p>第一版本：</p>
+</blockquote>
+</li>
+<li><p>在共享内存中存储pid的标志位，只有第一个设置共享内存的进程执行后续的定时任务。后续的进行运行到此代码的时候，获取pid标志位存在的，就退出，这个也是有毛病的。</p>
+</li>
+<li><p>因为当我们去执行nginx -s reload的时候，共享内存的值是存在的，这个就会导致定时任务后续就不再执行了。</p>
+<blockquote>
+<p>第二版本：</p>
+</blockquote>
+</li>
+<li><p>因此nginx的多个进程启动的速度是比较快的。通过设置一个时间到共享内存中。通过判断时间间隔小于5秒的值全部退出掉。</p>
+<blockquote>
+<p>第三版本:</p>
+</blockquote>
+</li>
+<li><p>没有了，如果有希望大神发个邮件给我，在此先感谢了。</p>
+</li>
+</ol>
+</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">| 服务名称 | 应用名称 | 类型 | TRACEID | 消耗时间 |</span><br><span class="line">| ------- | ------- | ---- | ------- | ------- |</span><br><span class="line">| /admin_api&amp;#124;app.get_readytask.V2.0 | container_01 | http | 0AC93E771539590210225000606AC0 | 323 |</span><br><span class="line">| /admin_api&amp;#124;app.get_readytask.V2.0 | container_01 | http | 0AC93E771539590210225000606AC0 | 323 |</span><br></pre></td></tr></table></figure>
+
       
     </div>
 
@@ -392,8 +429,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/31/Foxmail密码查看/" rel="next" title="Foxmail密码查看">
-                <i class="fa fa-chevron-left"></i> Foxmail密码查看
+              <a href="/2018/11/02/Lua编译/" rel="next" title="Lua编译">
+                <i class="fa fa-chevron-left"></i> Lua编译
               </a>
             
           </div>
@@ -401,10 +438,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/11/02/Lua编译/" rel="prev" title="Lua编译">
-                Lua编译 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -514,7 +547,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#在通过MakeDown显示表格效果的时候，当内容存在“-”符号，这个时候需要通过-amp-124来进行替换"><span class="nav-number">1.</span> <span class="nav-text">在通过MakeDown显示表格效果的时候，当内容存在“|”符号，这个时候需要通过&amp;#124来进行替换</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2018-10-31-耗时统计结果"><span class="nav-number">1.1.</span> <span class="nav-text">2018-10-31 耗时统计结果</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。"><span class="nav-number">1.</span> <span class="nav-text">在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。</span></a></li></ol></div>
             
 
           </div>
