@@ -115,7 +115,7 @@
 <meta property="og:site_name" content="Ewkoll">
 <meta property="og:description" content="在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。 把一些状态存储在lua的对象中，在收到请求的时候把对象内的值修改。这个操蛋的做法有什么问题？  这么做，当前你只有一个nginx工作进程，并且lua_code_cache on;的时候，居然是可以用的。  并且在Window环境下，你会发现大部分情况都是居然可以用的。  在多个进程的情况下，你处理请求的进程只是其中一个，在修">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-02T10:12:58.650Z">
+<meta property="og:updated_time" content="2018-11-02T10:24:44.245Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于Openresty的一些事情">
 <meta name="twitter:description" content="在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。 把一些状态存储在lua的对象中，在收到请求的时候把对象内的值修改。这个操蛋的做法有什么问题？  这么做，当前你只有一个nginx工作进程，并且lua_code_cache on;的时候，居然是可以用的。  并且在Window环境下，你会发现大部分情况都是居然可以用的。  在多个进程的情况下，你处理请求的进程只是其中一个，在修">
@@ -324,7 +324,7 @@
                 
               
 
-              <time title="创建时间：2018-11-02 17:46:30 / 修改时间：18:12:58" itemprop="dateCreated datePublished" datetime="2018-11-02T17:46:30+08:00">2018-11-02</time>
+              <time title="创建时间：2018-11-02 17:46:30 / 修改时间：18:24:44" itemprop="dateCreated datePublished" datetime="2018-11-02T17:46:30+08:00">2018-11-02</time>
             
 
             
@@ -392,7 +392,7 @@
 <p>第二版本：</p>
 </blockquote>
 </li>
-<li><p>因此nginx的多个进程启动的速度是比较快的。通过设置一个时间到共享内存中。通过判断时间间隔小于5秒的值全部退出掉。</p>
+<li><p>因为nginx的多个进程启动速度是比较快的。通过设置一个时间到共享内存中。通过判断时间间隔小于5秒的值全部退出掉。</p>
 <blockquote>
 <p>第三版本:</p>
 </blockquote>
@@ -438,6 +438,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/08/GO加密模块/" rel="prev" title="GO加密模块">
+                GO加密模块 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -507,7 +511,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-count">7</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
