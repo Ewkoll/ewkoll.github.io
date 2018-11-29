@@ -115,10 +115,12 @@
 <meta property="og:site_name" content="Ewkoll">
 <meta property="og:description" content="服务器异常断电的情况下，重启Hadoop会提示块异常进入安全模式。 先执行 hdfs dfsadmin -safemode leave 退出安全模式。  后执行 hdfs fsck /logminer/checkpoint/172.17.0.4_12a69c556cad 查看损坏的块。  后执行 hdfs fsck -delete /logminer/checkpoint/172.17.0.4_1">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-12T01:57:06.670Z">
+<meta property="og:image" content="/2018/11/12/Hadoop常见异常/storageid_error.png">
+<meta property="og:updated_time" content="2018-11-29T06:18:33.121Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hadoop常见异常">
 <meta name="twitter:description" content="服务器异常断电的情况下，重启Hadoop会提示块异常进入安全模式。 先执行 hdfs dfsadmin -safemode leave 退出安全模式。  后执行 hdfs fsck /logminer/checkpoint/172.17.0.4_12a69c556cad 查看损坏的块。  后执行 hdfs fsck -delete /logminer/checkpoint/172.17.0.4_1">
+<meta name="twitter:image" content="/2018/11/12/Hadoop常见异常/storageid_error.png">
 
 
 
@@ -324,12 +326,24 @@
                 
               
 
-              <time title="创建时间：2018-11-12 09:50:52 / 修改时间：09:57:06" itemprop="dateCreated datePublished" datetime="2018-11-12T09:50:52+08:00">2018-11-12</time>
+              <time title="创建时间：2018-11-12 09:50:52" itemprop="dateCreated datePublished" datetime="2018-11-12T09:50:52+08:00">2018-11-12</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-11-29 14:18:33" itemprop="dateModified" datetime="2018-11-29T14:18:33+08:00">2018-11-29</time>
               
             
           </span>
@@ -368,6 +382,15 @@
 <li><p>后执行 hdfs fsck /logminer/checkpoint/172.17.0.4_12a69c556cad 查看损坏的块。</p>
 </li>
 <li><p>后执行 hdfs fsck -delete /logminer/checkpoint/172.17.0.4_12a69c556cad 对应的块数据。</p>
+</li>
+</ol>
+<h3 id="意外删除副本机器上的Hadoop数据目录解决版本"><a href="#意外删除副本机器上的Hadoop数据目录解决版本" class="headerlink" title="意外删除副本机器上的Hadoop数据目录解决版本"></a>意外删除副本机器上的Hadoop数据目录解决版本</h3><ol>
+<li><p>先从正常的机器拷贝Datanode节点数据到删除的副本机器上。</p>
+</li>
+<li><p>停止在直接启动集群，会出现以下错误。</p>
+ <img src="/2018/11/12/Hadoop常见异常/storageid_error.png">
+</li>
+<li><p>修改/home/hadoop/data/dfs/datanode/current/VERSION文件的datanodeUuid，只要改一位就可以。</p>
 </li>
 </ol>
 
@@ -479,7 +502,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -519,7 +542,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器异常断电的情况下，重启Hadoop会提示块异常进入安全模式。"><span class="nav-number">1.</span> <span class="nav-text">服务器异常断电的情况下，重启Hadoop会提示块异常进入安全模式。</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器异常断电的情况下，重启Hadoop会提示块异常进入安全模式。"><span class="nav-number">1.</span> <span class="nav-text">服务器异常断电的情况下，重启Hadoop会提示块异常进入安全模式。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#意外删除副本机器上的Hadoop数据目录解决版本"><span class="nav-number">2.</span> <span class="nav-text">意外删除副本机器上的Hadoop数据目录解决版本</span></a></li></ol></div>
             
 
           </div>

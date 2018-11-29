@@ -279,6 +279,162 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="/2018/11/29/记录一次SparkStream中Processing-Time时间过长的问题/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ideath@operatorworld.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ewkoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/29/记录一次SparkStream中Processing-Time时间过长的问题/" itemprop="url">
+                  记录一次SparkStream中Processing Time时间过长的问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-29 14:20:58 / 修改时间：14:32:15" itemprop="dateCreated datePublished" datetime="2018-11-29T14:20:58+08:00">2018-11-29</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="问题的起因很简单，Spark-Stream执行的批任务堆积。"><a href="#问题的起因很简单，Spark-Stream执行的批任务堆积。" class="headerlink" title="问题的起因很简单，Spark Stream执行的批任务堆积。"></a>问题的起因很简单，Spark Stream执行的批任务堆积。</h2><h3 id="第一次排查"><a href="#第一次排查" class="headerlink" title="第一次排查"></a>第一次排查</h3><ul>
+<li><p>通过UI查看了时间消耗问题。发现主要是在代码中执行saveToEs的时候花费了非常的时间。</p>
+</li>
+<li><p>查看网络连接，发现通信端存在大量的TIME_WAIT状态的连接。</p>
+   <img src="/2018/11/29/记录一次SparkStream中Processing-Time时间过长的问题/time_wait.png">
+<ul>
+<li><p>图片显示的数值是调整了访问2个ES节点地址之后的结果，只访问一个的时候会存在1W多个这样的连接状态。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/sysctl.conf</span><br><span class="line"></span><br><span class="line">net.ipv4.tcp_syncookies = 1</span><br><span class="line">net.ipv4.tcp_tw_reuse = 1</span><br><span class="line">net.ipv4.tcp_tw_recycle = 1</span><br><span class="line">net.ipv4.tcp_fin_timeout = 30</span><br><span class="line"></span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>针对这个情况，暂时没有找到解决的办法，只能推测saveToEsWithMeta这样的函数内部是HTTP短连接每次都会建立新的TCP连接到ES服务器。（还没看源码！）</p>
+</li>
+</ul>
+<h3 id="第二次排查"><a href="#第二次排查" class="headerlink" title="第二次排查"></a>第二次排查</h3><ul>
+<li>针对ES提供的库暂时改不了的情况，寻求其它解决办法。</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="/2018/11/26/ES常见问题/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -473,12 +629,24 @@
                 
               
 
-              <time title="创建时间：2018-11-12 09:50:52 / 修改时间：09:57:06" itemprop="dateCreated datePublished" datetime="2018-11-12T09:50:52+08:00">2018-11-12</time>
+              <time title="创建时间：2018-11-12 09:50:52" itemprop="dateCreated datePublished" datetime="2018-11-12T09:50:52+08:00">2018-11-12</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-11-29 14:18:33" itemprop="dateModified" datetime="2018-11-29T14:18:33+08:00">2018-11-29</time>
               
             
           </span>
@@ -519,6 +687,15 @@
 <li><p>后执行 hdfs fsck /logminer/checkpoint/172.17.0.4_12a69c556cad 查看损坏的块。</p>
 </li>
 <li><p>后执行 hdfs fsck -delete /logminer/checkpoint/172.17.0.4_12a69c556cad 对应的块数据。</p>
+</li>
+</ol>
+<h3 id="意外删除副本机器上的Hadoop数据目录解决版本"><a href="#意外删除副本机器上的Hadoop数据目录解决版本" class="headerlink" title="意外删除副本机器上的Hadoop数据目录解决版本"></a>意外删除副本机器上的Hadoop数据目录解决版本</h3><ol>
+<li><p>先从正常的机器拷贝Datanode节点数据到删除的副本机器上。</p>
+</li>
+<li><p>停止在直接启动集群，会出现以下错误。</p>
+ <img src="/2018/11/12/Hadoop常见异常/storageid_error.png">
+</li>
+<li><p>修改/home/hadoop/data/dfs/datanode/current/VERSION文件的datanodeUuid，只要改一位就可以。</p>
 </li>
 </ol>
 
@@ -1839,7 +2016,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

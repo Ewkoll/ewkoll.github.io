@@ -108,26 +108,26 @@
 
 
 
-  <meta name="description" content="ES写入数据可能会出现FORBIDDEN/12/index read-only / allow delete (api)]错误      相关链接   这个问题是因为ES的存储空间不够，导致写入数据失败。   1、调整存储的磁盘空间。然后重启ES程序。   2、执行以下代码。   12345678PUT _settings&amp;#123;    &amp;quot;index&amp;quot;: &amp;#123;">
+  <meta name="description" content="问题的起因很简单，Spark Stream执行的批任务堆积。第一次排查 通过UI查看了时间消耗问题。发现主要是在代码中执行saveToEs的时候花费了非常的时间。  查看网络连接，发现通信端存在大量的TIME_WAIT状态的连接。      图片显示的数值是调整了访问2个ES节点地址之后的结果，只访问一个的时候会存在1W多个这样的连接状态。 12345678vi /etc/sysctl.confn">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ES常见问题">
-<meta property="og:url" content="/2018/11/26/ES常见问题/index.html">
+<meta property="og:title" content="记录一次SparkStream中Processing Time时间过长的问题">
+<meta property="og:url" content="/2018/11/29/记录一次SparkStream中Processing-Time时间过长的问题/index.html">
 <meta property="og:site_name" content="Ewkoll">
-<meta property="og:description" content="ES写入数据可能会出现FORBIDDEN/12/index read-only / allow delete (api)]错误      相关链接   这个问题是因为ES的存储空间不够，导致写入数据失败。   1、调整存储的磁盘空间。然后重启ES程序。   2、执行以下代码。   12345678PUT _settings&amp;#123;    &amp;quot;index&amp;quot;: &amp;#123;">
+<meta property="og:description" content="问题的起因很简单，Spark Stream执行的批任务堆积。第一次排查 通过UI查看了时间消耗问题。发现主要是在代码中执行saveToEs的时候花费了非常的时间。  查看网络连接，发现通信端存在大量的TIME_WAIT状态的连接。      图片显示的数值是调整了访问2个ES节点地址之后的结果，只访问一个的时候会存在1W多个这样的连接状态。 12345678vi /etc/sysctl.confn">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="/2018/11/26/ES常见问题/es.png">
-<meta property="og:updated_time" content="2018-11-26T03:16:11.806Z">
+<meta property="og:image" content="/2018/11/29/记录一次SparkStream中Processing-Time时间过长的问题/time_wait.png">
+<meta property="og:updated_time" content="2018-11-29T06:32:15.375Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ES常见问题">
-<meta name="twitter:description" content="ES写入数据可能会出现FORBIDDEN/12/index read-only / allow delete (api)]错误      相关链接   这个问题是因为ES的存储空间不够，导致写入数据失败。   1、调整存储的磁盘空间。然后重启ES程序。   2、执行以下代码。   12345678PUT _settings&amp;#123;    &amp;quot;index&amp;quot;: &amp;#123;">
-<meta name="twitter:image" content="/2018/11/26/ES常见问题/es.png">
+<meta name="twitter:title" content="记录一次SparkStream中Processing Time时间过长的问题">
+<meta name="twitter:description" content="问题的起因很简单，Spark Stream执行的批任务堆积。第一次排查 通过UI查看了时间消耗问题。发现主要是在代码中执行saveToEs的时候花费了非常的时间。  查看网络连接，发现通信端存在大量的TIME_WAIT状态的连接。      图片显示的数值是调整了访问2个ES节点地址之后的结果，只访问一个的时候会存在1W多个这样的连接状态。 12345678vi /etc/sysctl.confn">
+<meta name="twitter:image" content="/2018/11/29/记录一次SparkStream中Processing-Time时间过长的问题/time_wait.png">
 
 
 
 
 
 
-  <link rel="canonical" href="/2018/11/26/ES常见问题/">
+  <link rel="canonical" href="/2018/11/29/记录一次SparkStream中Processing-Time时间过长的问题/">
 
 
 
@@ -137,7 +137,7 @@
   };
 </script>
 
-  <title>ES常见问题 | Ewkoll</title>
+  <title>记录一次SparkStream中Processing Time时间过长的问题 | Ewkoll</title>
   
 
 
@@ -284,7 +284,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="/2018/11/26/ES常见问题/">
+    <link itemprop="mainEntityOfPage" href="/2018/11/29/记录一次SparkStream中Processing-Time时间过长的问题/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ideath@operatorworld.com">
@@ -301,7 +301,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">ES常见问题
+          <h1 class="post-title" itemprop="name headline">记录一次SparkStream中Processing Time时间过长的问题
               
             
           </h1>
@@ -326,7 +326,7 @@
                 
               
 
-              <time title="创建时间：2018-11-26 11:07:10 / 修改时间：11:16:11" itemprop="dateCreated datePublished" datetime="2018-11-26T11:07:10+08:00">2018-11-26</time>
+              <time title="创建时间：2018-11-29 14:20:58 / 修改时间：14:32:15" itemprop="dateCreated datePublished" datetime="2018-11-29T14:20:58+08:00">2018-11-29</time>
             
 
             
@@ -364,14 +364,22 @@
       
 
       
-        <ul>
-<li><p>ES写入数据可能会出现FORBIDDEN/12/index read-only / allow delete (api)]错误</p>
-  <img src="/2018/11/26/ES常见问题/es.png">
-<p>  <a href="https://discuss.elastic.co/t/forbidden-12-index-read-only-allow-delete-api/110282/3" target="_blank" rel="noopener">相关链接</a></p>
-<p>  这个问题是因为ES的存储空间不够，导致写入数据失败。</p>
-<p>  1、调整存储的磁盘空间。然后重启ES程序。</p>
-<p>  2、执行以下代码。</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PUT _settings</span><br><span class="line">&#123;</span><br><span class="line">    &quot;index&quot;: &#123;</span><br><span class="line">        &quot;blocks&quot;: &#123;</span><br><span class="line">        &quot;read_only_allow_delete&quot;: &quot;false&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+        <h2 id="问题的起因很简单，Spark-Stream执行的批任务堆积。"><a href="#问题的起因很简单，Spark-Stream执行的批任务堆积。" class="headerlink" title="问题的起因很简单，Spark Stream执行的批任务堆积。"></a>问题的起因很简单，Spark Stream执行的批任务堆积。</h2><h3 id="第一次排查"><a href="#第一次排查" class="headerlink" title="第一次排查"></a>第一次排查</h3><ul>
+<li><p>通过UI查看了时间消耗问题。发现主要是在代码中执行saveToEs的时候花费了非常的时间。</p>
+</li>
+<li><p>查看网络连接，发现通信端存在大量的TIME_WAIT状态的连接。</p>
+   <img src="/2018/11/29/记录一次SparkStream中Processing-Time时间过长的问题/time_wait.png">
+<ul>
+<li><p>图片显示的数值是调整了访问2个ES节点地址之后的结果，只访问一个的时候会存在1W多个这样的连接状态。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/sysctl.conf</span><br><span class="line"></span><br><span class="line">net.ipv4.tcp_syncookies = 1</span><br><span class="line">net.ipv4.tcp_tw_reuse = 1</span><br><span class="line">net.ipv4.tcp_tw_recycle = 1</span><br><span class="line">net.ipv4.tcp_fin_timeout = 30</span><br><span class="line"></span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>针对这个情况，暂时没有找到解决的办法，只能推测saveToEsWithMeta这样的函数内部是HTTP短连接每次都会建立新的TCP连接到ES服务器。（还没看源码！）</p>
+</li>
+</ul>
+<h3 id="第二次排查"><a href="#第二次排查" class="headerlink" title="第二次排查"></a>第二次排查</h3><ul>
+<li>针对ES提供的库暂时改不了的情况，寻求其它解决办法。</li>
 </ul>
 
       
@@ -400,8 +408,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/12/Hadoop常见异常/" rel="next" title="Hadoop常见异常">
-                <i class="fa fa-chevron-left"></i> Hadoop常见异常
+              <a href="/2018/11/26/ES常见问题/" rel="next" title="ES常见问题">
+                <i class="fa fa-chevron-left"></i> ES常见问题
               </a>
             
           </div>
@@ -409,10 +417,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/11/29/记录一次SparkStream中Processing-Time时间过长的问题/" rel="prev" title="记录一次SparkStream中Processing Time时间过长的问题">
-                记录一次SparkStream中Processing Time时间过长的问题 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -457,8 +461,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -503,6 +516,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题的起因很简单，Spark-Stream执行的批任务堆积。"><span class="nav-number">1.</span> <span class="nav-text">问题的起因很简单，Spark Stream执行的批任务堆积。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一次排查"><span class="nav-number">1.1.</span> <span class="nav-text">第一次排查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二次排查"><span class="nav-number">1.2.</span> <span class="nav-text">第二次排查</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
