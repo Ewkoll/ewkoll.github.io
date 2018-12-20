@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="简单记录.Class文件结构ClassFile总体结构123456789101112131415161718ClassFile &amp;#123;    u4             magic;    u2             minor_version;    u2             major_version;    u2             constant_pool_count;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java字节码(.class文件结构)">
+<meta property="og:url" content="/2018/12/20/Java字节码-class文件结构/index.html">
+<meta property="og:site_name" content="Ewkoll">
+<meta property="og:description" content="简单记录.Class文件结构ClassFile总体结构123456789101112131415161718ClassFile &amp;#123;    u4             magic;    u2             minor_version;    u2             major_version;    u2             constant_pool_count;">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-20T07:54:45.309Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java字节码(.class文件结构)">
+<meta name="twitter:description" content="简单记录.Class文件结构ClassFile总体结构123456789101112131415161718ClassFile &amp;#123;    u4             magic;    u2             minor_version;    u2             major_version;    u2             constant_pool_count;">
+
+
+
+
+
+
+  <link rel="canonical" href="/2018/12/20/Java字节码-class文件结构/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Java字节码(.class文件结构) | Ewkoll</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Ewkoll</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="/2018/12/20/Java字节码-class文件结构/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ideath@operatorworld.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ewkoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java字节码(.class文件结构)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-20 11:11:02 / 修改时间：15:54:45" itemprop="dateCreated datePublished" datetime="2018-12-20T11:11:02+08:00">2018-12-20</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="简单记录-Class文件结构"><a href="#简单记录-Class文件结构" class="headerlink" title="简单记录.Class文件结构"></a>简单记录.Class文件结构</h2><h3 id="ClassFile总体结构"><a href="#ClassFile总体结构" class="headerlink" title="ClassFile总体结构"></a>ClassFile总体结构</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">ClassFile &#123;</span><br><span class="line">    u4             magic;</span><br><span class="line">    u2             minor_version;</span><br><span class="line">    u2             major_version;</span><br><span class="line">    u2             constant_pool_count;</span><br><span class="line">    cp_info        constant_pool[constant_pool_count<span class="number">-1</span>];</span><br><span class="line">    u2             access_flags;</span><br><span class="line">    u2             this_class;</span><br><span class="line">    u2             super_class;</span><br><span class="line">    u2             interfaces_count;</span><br><span class="line">    u2             interfaces[interfaces_count];</span><br><span class="line">    u2             fields_count;</span><br><span class="line">    field_info     fields[fields_count];</span><br><span class="line">    u2             methods_count;</span><br><span class="line">    method_info    methods[methods_count];</span><br><span class="line">    u2             attributes_count;</span><br><span class="line">    attribute_info attributes[attributes_count];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>magic</p>
+<blockquote>
+<p>标识是否是class文件，正常class文件开头都是4个字节0xCAFEBABE.</p>
+</blockquote>
+</li>
+<li><p>minor_version major_version</p>
+<blockquote>
+<p>编译成class文件的版本号，java6编译的major_version是0x32.</p>
+</blockquote>
+</li>
+<li><p>constant_pool_count</p>
+<blockquote>
+<p>常量池的数量。</p>
+</blockquote>
+</li>
+<li><p>constant_pool</p>
+<blockquote>
+<p>常量池，用于存放不同类型的数据，各种字符串，变量名称，变量类型都会存储在常量池。</p>
+</blockquote>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cp_info &#123;</span><br><span class="line">    u1 tag;</span><br><span class="line">    u1 info[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> | Constant Type                 | Value |<br> | —————————– | —– |<br> | CONSTANT_Class                |   7   |<br> | CONSTANT_Fieldref             |   9   |<br> | CONSTANT_Methodref            |   10  |<br> | CONSTANT_InterfaceMethodref   |   11  |<br> | CONSTANT_String               |   8   |<br> | CONSTANT_Integer              |   3   |<br> | CONSTANT_Float                |   4   |<br> | CONSTANT_Long                 |   5   |<br> | CONSTANT_Double               |   6   |<br> | CONSTANT_NameAndType          |   12  |<br> | CONSTANT_Utf8                 |   1   |<br> | CONSTANT_MethodHandle         |   15  |<br> | CONSTANT_MethodType           |   16  |<br> | CONSTANT_InvokeDynamic        |   18  |</p>
+</li>
+<li><p>access_flags</p>
+<blockquote>
+<p>指定接口和类的访问权限。</p>
+</blockquote>
+<p> | Flag Name     | Value     | Interpretation                                       |<br> | ————- | ———-| —————————————————–|<br> | ACC_PUBLIC    | 0x0001    | 公共，可以被外部包访问。                               |<br> | ACC_FINAL     | 0x0010    | 不允许继承.                                           |<br> | ACC_SUPER     | 0x0020    | 当被invoke.指令调用时,要特别对待超类方法。              |<br> | ACC_INTERFACE | 0x0200    | 接口类。                                              |<br> | ACC_ABSTRACT  | 0x0400    | 抽象类，不能实例化。                                   |<br> | ACC_SYNTHETIC | 0x1000    | 编译器生成，不在源代码中。                             |<br> | ACC_ANNOTATION| 0x2000    | 注解类型。                                            |<br> | ACC_ENUM      | 0x4000    | 枚举类型。                                            |</p>
+</li>
+<li><p>this_class</p>
+<blockquote>
+<p>指向的是在静态区的CONSTANT_class_info结构体，说明当前的类名称。</p>
+</blockquote>
+</li>
+<li><p>super_class</p>
+<blockquote>
+<p>0 或者 指向的是在静态区的CONSTANT_class_info结构体，说明当前的父类名称。</p>
+</blockquote>
+</li>
+<li><p>interfaces_count</p>
+<blockquote>
+<p>说明接口的数量</p>
+</blockquote>
+</li>
+<li><p>interfaces</p>
+<blockquote>
+<p>指向CONSTANT_class_info数组，记录当前类的实现接口。</p>
+</blockquote>
+</li>
+<li><p>fields_count</p>
+<blockquote>
+<p>字段数量</p>
+</blockquote>
+</li>
+<li><p>fields</p>
+<blockquote>
+<p>字段信息。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">field_info &#123;</span><br><span class="line">    u2             access_flags;</span><br><span class="line">    u2             name_index;</span><br><span class="line">    u2             descriptor_index;</span><br><span class="line">    u2             attributes_count;</span><br><span class="line">    attribute_info attributes[attributes_count];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>| Flag Name     | Value     | Interpretation                             |<br>| ————- | ——— | —————————————— |<br>| ACC_PUBLIC    | 0x0001    | pubilc，包外可访问。                        |<br>| ACC_PRIVATE   | 0x0002    | private，只可在类内访问。                    |<br>| ACC_PROTECTED | 0x0004    | protected，类内和子类中可访问。              |<br>| ACC_STATIC    | 0x0008    | static. 静态。                              |<br>| ACC_FINAL     | 0x0010    | final. 常量。                               |<br>| ACC_VOLATILE  | 0x0040    | 易变类型。                                  |<br>| ACC_TRANSIENT | 0x0080    | 序列化忽略。                                |<br>| ACC_SYNTHETIC | 0x1000    | 编译器产生。                                |<br>| ACC_ENUM      | 0x4000    | 枚举类型。                                  |</p>
+</li>
+<li><p>methods_count</p>
+<blockquote>
+<p>方法数量</p>
+</blockquote>
+</li>
+<li><p>methods</p>
+<blockquote>
+<p>方法信息。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">method_info &#123;</span><br><span class="line">    u2             access_flags;</span><br><span class="line">    u2             name_index;</span><br><span class="line">    u2             descriptor_index;</span><br><span class="line">    u2             attributes_count;</span><br><span class="line">    attribute_info attributes[attributes_count];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>| Flag Name         | Value     | Interpretation    |<br>| -                 | -         | -                 |<br>| ACC_PUBLIC        | 0x0001    | 公共方法<br>| ACC_PRIVATE       | 0x0002    | 私有方法<br>| ACC_PROTECTED     | 0x0004    | 保护方法<br>| ACC_STATIC        | 0x0008    | 静态方法<br>| ACC_FINAL         | 0x0010    | 不允许重写<br>| ACC_SYNCHRONIZED  | 0x0020    | Declared  synchronized; invocation is wrapped by a monitor use.<br>| ACC_BRIDGE        | 0x0040    | 编译器生成<br>| ACC_VARARGS       | 0x0080    | 可变参数<br>| ACC_NATIVE        | 0x0100    | Native方法<br>| ACC_ABSTRACT      | 0x0400    | 抽象方法<br>| ACC_STRICT        | 0x0800    | 浮点数模型2.8.2<br>| ACC_SYNTHETIC     | 0x1000    | 编译器生成方法</p>
+</li>
+<li><p>attributes_count</p>
+<blockquote>
+<p>属性数量</p>
+</blockquote>
+</li>
+<li><p>attributes</p>
+<blockquote>
+<p>属性信息</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="静态区结构体"><a href="#静态区结构体" class="headerlink" title="静态区结构体"></a>静态区结构体</h3><ol>
+<li><p>CONSTANT_Class_info 代表接口或者类</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_Class_info &#123;</span><br><span class="line">    u1 tag; // 7</span><br><span class="line">    u2 name_index; // 指向静态区的CONSTANT_Utf8_info存储名称。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CONSTANT_Fieldref_info 用于记录字段信息 </p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_Fieldref_info &#123;</span><br><span class="line">    u1 tag; // 9</span><br><span class="line">    u2 class_index; // 指向的可能是classtype或者interfacetype</span><br><span class="line">    u2 name_and_type_index; // 指向 CONSTANT_NameAndType_info 字段描述或者方法描述</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CONSTANT_Methodref_info 用于记录方法信息</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_Methodref_info &#123;</span><br><span class="line">    u1 tag; // 10</span><br><span class="line">    u2 class_index; // classtype</span><br><span class="line">    u2 name_and_type_index; // 如果是&lt;开始的，那么一定是void &lt;init&gt;的方法</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CONSTANT_InterfaceMethodref_info 用于记录接口中的方法信息</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_InterfaceMethodref_info &#123;</span><br><span class="line">    u1 tag; // 11</span><br><span class="line">    u2 class_index; // interfacetype</span><br><span class="line">    u2 name_and_type_index; // 指向 CONSTANT_NameAndType_info 字段描述或者方法描述</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CONSTANT_String_info 记录字符串。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_String_info &#123;</span><br><span class="line">    u1 tag; // 8 </span><br><span class="line">    u2 string_index; // 指向CONSTANT_Utf8_info</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CONSTANT_Integer_info 记录Int类型常量</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_Integer_info &#123;</span><br><span class="line">    u1 tag; // 3</span><br><span class="line">    u4 bytes; // 整型常量</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CONSTANT_Float_info 记录浮点数常量</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_Float_info &#123;</span><br><span class="line">    u1 tag; // 4</span><br><span class="line">    u4 bytes; // 浮点常量</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 几个特殊值：</p>
+<p> 0x7f800000 =&gt; Float.POSITIVE_INFINITY </p>
+<p> 0xff800000 =&gt; Float.NEGATIVE_INFINITY</p>
+<p> 0x7f800001 to 0x7fffffff =&gt; Float.NaN</p>
+<p> 0xff800001 to 0xffffffff =&gt; Float.NaN</p>
+<ol start="8">
+<li><p>CONSTANT_Long_info 记录long类型常量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_Long_info &#123;</span><br><span class="line">    u1 tag; // 5</span><br><span class="line">    u4 high_bytes; // 高4位</span><br><span class="line">    u4 low_bytes;  // 低4位</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>CONSTANT_Double_info 记录Double类型常量</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_Double_info &#123;</span><br><span class="line">    u1 tag; // 6</span><br><span class="line">    u4 high_bytes;  // 双精度浮点的高四位值</span><br><span class="line">    u4 low_bytes;   // 双精度浮点的低四位值</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 几个特殊值：</p>
+<p> 0x7ff0000000000000L =&gt; Double.POSITIVE_INFINITY</p>
+<p> 0xfff0000000000000L =&gt; Double.NEGATIVE_INFINITY</p>
+<p> 0x7ff0000000000001L to 0x7fffffffffffffffL =&gt; Double.NaN</p>
+<p> 0xfff0000000000001L to 0xffffffffffffffffL =&gt; Double.NaN</p>
+</li>
+<li><p>CONSTANT_NameAndType_info 记录方法或字段的名称(name)和描述符(descriptor)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_NameAndType_info &#123;</span><br><span class="line">    u1 tag; // 12</span><br><span class="line">    u2 name_index; // CONSTANT_Utf8_info </span><br><span class="line">    u2 descriptor_index; // CONSTANT_Utf8_info </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CONSTANT_Utf8_info 记录字符串。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_Utf8_info &#123;</span><br><span class="line">    u1 tag; // 1</span><br><span class="line">    u2 length; // 长度</span><br><span class="line">    u1 bytes[length]; // 字符串数据。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CONSTANT_MethodHandle_info 代表方法句柄</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_MethodHandle_info &#123;</span><br><span class="line">    u1 tag; // 15 </span><br><span class="line">    u1 reference_kind; // 1-9的值</span><br><span class="line">    u2 reference_index; // 不同的reference_kind值有不同的行为。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CONSTANT_MethodType_info</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_MethodType_info &#123;</span><br><span class="line">    u1 tag; // 16</span><br><span class="line">    u2 descriptor_index; // CONSTANT_Utf8_info</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CONSTANT_InvokeDynamic_info</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_InvokeDynamic_info &#123;</span><br><span class="line">    u1 tag; // 17</span><br><span class="line">    u2 bootstrap_method_attr_index;</span><br><span class="line">    u2 name_and_type_index;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/29/Spark相关/" rel="next" title="Spark相关">
+                <i class="fa fa-chevron-left"></i> Spark相关
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ideath@operatorworld.com</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单记录-Class文件结构"><span class="nav-number">1.</span> <span class="nav-text">简单记录.Class文件结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassFile总体结构"><span class="nav-number">1.1.</span> <span class="nav-text">ClassFile总体结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态区结构体"><span class="nav-number">1.2.</span> <span class="nav-text">静态区结构体</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ideath@operatorworld.com</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Muse</a> v6.4.2</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
