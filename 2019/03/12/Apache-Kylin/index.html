@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="提供Hadoop/Spark之上的SQL查询接口及多维分析能力以支持超大规模数据，亚秒内查询巨大的Hive表。  Kylin实现秒级查询的关键点是预计算，对于超大数据集的复杂查询，既然现场计算需要花费较长时间，那么根据空间换时间的原理，我们就可以提前将所有可能的计算结果计算并存储下来，把高复杂度的聚合运算、多表连接等操作转换成对预计算结果的查询，比如把本该进行的Join、Sum、CountDis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Apache Kylin">
+<meta property="og:url" content="/2019/03/12/Apache-Kylin/index.html">
+<meta property="og:site_name" content="Ewkoll">
+<meta property="og:description" content="提供Hadoop/Spark之上的SQL查询接口及多维分析能力以支持超大规模数据，亚秒内查询巨大的Hive表。  Kylin实现秒级查询的关键点是预计算，对于超大数据集的复杂查询，既然现场计算需要花费较长时间，那么根据空间换时间的原理，我们就可以提前将所有可能的计算结果计算并存储下来，把高复杂度的聚合运算、多表连接等操作转换成对预计算结果的查询，比如把本该进行的Join、Sum、CountDis">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-19T03:22:55.384Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Apache Kylin">
+<meta name="twitter:description" content="提供Hadoop/Spark之上的SQL查询接口及多维分析能力以支持超大规模数据，亚秒内查询巨大的Hive表。  Kylin实现秒级查询的关键点是预计算，对于超大数据集的复杂查询，既然现场计算需要花费较长时间，那么根据空间换时间的原理，我们就可以提前将所有可能的计算结果计算并存储下来，把高复杂度的聚合运算、多表连接等操作转换成对预计算结果的查询，比如把本该进行的Join、Sum、CountDis">
+
+
+
+
+
+
+  <link rel="canonical" href="/2019/03/12/Apache-Kylin/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Apache Kylin | Ewkoll</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Ewkoll</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="/2019/03/12/Apache-Kylin/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ideath@operatorworld.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ewkoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Apache Kylin
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-12 16:48:45" itemprop="dateCreated datePublished" datetime="2019-03-12T16:48:45+08:00">2019-03-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-19 11:22:55" itemprop="dateModified" datetime="2019-03-19T11:22:55+08:00">2019-03-19</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>提供Hadoop/Spark之上的SQL查询接口及多维分析能力以支持超大规模数据，亚秒内查询巨大的Hive表。</p>
+</blockquote>
+<p>Kylin实现秒级查询的关键点是预计算，对于超大数据集的复杂查询，既然现场计算需要花费较长时间，那么根据空间换时间的原理，我们就可以提前将所有可能的计算结果计算并存储下来，把高复杂度的聚合运算、多表连接等操作转换成对预计算结果的查询，比如把本该进行的Join、Sum、CountDistinct等操作改写成Cube的查询操作。从而实现超大数据集的秒级多维分析查询。<br>-简单的说就是把要计算的指标先计算后存储到数据库，然后提供查询机制。</p>
+<p>REST Server:<br>REST Server是一套面向应用程序开发的入口点，旨在实现针对Kylin平台的应用开发工作。 此类应用程序可以提供查询、获取结果、触发cube构建任务、获取元数据以及获取用户权限等等。 另外可以通过Restful接口实现SQL查询。</p>
+<p>查询引擎（Query Engine）:<br>当cube准备就绪后，查询引擎就能够获取并解析用户查询。它随后会与系统中的其它组件进行交互，从而向用户返回对应的结果。<br>在Kylin当中，我们使用一套名为Apache Calcite的开源动态数据管理框架对代码内的SQL以及其它插入内容进行解析。</p>
+<p>Routing<br>负责将解析的SQL生成的执行计划转换成cube缓存的查询，cube是通过预计算缓存在hbase中，这部分查询可以在秒级设置毫秒级完成，而且还有一些操作使用过的查询原始数据（存储在Hadoop的hdfs中通过hive查询）。这部分查询延迟较高。</p>
+<p>元数据管理工具（Metadata Manager）<br>Kylin是一款元数据驱动型应用程序。元数据管理工具是一大关键性组件，用于对保存在Kylin当中的所有元数据进行管理，其中包括最为重要的cube元数据。其它全部组件的正常运作都需以元数据管理工具为基础。 Kylin的元数据存储在hbase中。</p>
+<p>任务引擎（Cube Build Engine）:<br>这套引擎的设计目的在于处理所有离线任务，其中包括shell脚本、Java API以及Map Reduce任务等等。任务引擎对Kylin当中的全部任务加以管理与协调，从而确保每一项任务都能得到切实执行并解决其间出现的故障。其实就是任务调度和分配。</p>
+<p>存储引擎（Storage Engine）<br>这套引擎负责管理底层存储——特别是cuboid，其以键-值对的形式进行保存。存储引擎使用的是HBase——这是目前Hadoop生态系统当中最理想的键-值系统使用方案。Kylin还能够通过扩展实现对其它键-值系统的支持，例如Redis。</p>
+<p>Kylin的三大依赖模块分别是数据源、构建引擎和存储引擎。默认这三者分别是Hive、MapReduce和HBase。但随着推广和使用的深入，渐渐有用户发现它们均存在不足之处。比如，实时分析可能会希望从Kafka导入数据而不是从Hive；而Spark的迅速崛起，又使我们不得不考虑将MapReduce替换为Spark，以期大幅提高Cube的构建速度；至于HBase，它的读性能可能还不如Cassandra或Kudu等。因此Kylin1.5版本的系统架构进行了重构，将数据源、构建引擎、存储引擎三大依赖抽象为接口，而Hive、MapReduce、HBase只是默认实现。深度用户可以根据自己的需要做二次开发，将其中的一个或多个替换为更适合的技术。</p>
+<ol>
+<li>百亿规模数查询效率</li>
+<li>支撑大部分查询SQL功能</li>
+<li>定义数据模型构建立方体</li>
+</ol>
+<blockquote>
+<p>支撑的BI工具</p>
+<ol>
+<li><a href="https://www.tableau.com/zh-cn/products/trial" target="_blank" rel="noopener">Tableau</a></li>
+<li><a href="https://www.microstrategy.cn/cn" target="_blank" rel="noopener">MSTR</a></li>
+<li><a href="https://www.qlik.com/us/products/qlik-sense" target="_blank" rel="noopener">QlikSense</a></li>
+<li><a href="https://superset.incubator.apache.org/" target="_blank" rel="noopener">Superset-开源</a></li>
+<li><a href="https://github.com/cloudera/hue" target="_blank" rel="noopener">Hue-开源</a></li>
+</ol>
+</blockquote>
+<blockquote>
+<p>其它一些BI工具</p>
+<ol>
+<li><a href="https://github.com/grafana/grafana" target="_blank" rel="noopener">grafana</a> 是一个开源的时序性统计和监控平台-时间序列。</li>
+<li>[Superset] 静态报表更好。</li>
+<li>[FineBI] 国内商业BI报表。</li>
+<li><a href="https://edp963.github.io/davinci/" target="_blank" rel="noopener">Davinci</a> 宜信技术研发中心-数据源MYSQL-CSV文件</li>
+<li><a href="https://zeppelin.apache.org/" target="_blank" rel="noopener">Zeppelin</a> 可以跟Spark结合，开源项目</li>
+<li><a href="https://franchise.cloud/" target="_blank" rel="noopener">Franchise</a> 看不出什么优点</li>
+<li><a href="https://redash.io/" target="_blank" rel="noopener">Redash</a> 开源项目</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>基本概念</p>
+<ol>
+<li>OLAP（On-line Analytical Processing） Cube 多维模型中事实表（Fact Table）。</li>
+<li>OLAP的多维分析操作包括：钻取（Drill-down）、上卷（Roll-up）、切片（Slice）、切块（Dice）、旋转（Pivot）。</li>
+<li>度量（Measure）用于描述事件的数字尺度。</li>
+<li>计算度量（Calculated Measure）通过度量计算后的结果，比如：同比利润，环比利润，利率变化。</li>
+<li>自上而下的钻取、自下而上地聚合。</li>
+<li>维（Dimension）、层次（Hierarchy）</li>
+<li>LDAP（Lightweight Directory Access Protocol）轻量目录访问协议。</li>
+<li>SSO（Single sign-on）单一登录。</li>
+<li><a href="https://zhuanlan.zhihu.com/p/26562588" target="_blank" rel="noopener">HyperLogLog</a>基数统计，去重后结果总数。</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>ROLAP、MOLAP和HOLAP联机分析处理区别</p>
+<ol>
+<li>ROLAP(Relational OLAP) 关系型数据库联机分析 - 特点是将细节数据保留在关系型数据库的事实表中，聚合后的数据也保存在关系型的数据库中。</li>
+<li>MOLAP(Multidimensional OLAP) 多维数据联机分析（KYLIN）- 特点是将细节数据和聚合后的数据均保存在cube中，所以以空间换效率，查询时效率高，但生成cube时需要大量的时间和空间。</li>
+<li>HOLAP(Hybrid OLAP) 混合数据组织OLAP实现 - 特点是将细节数据保留在关系型数据库的事实表中，但是聚合后的数据保存在cube中,聚合时需要比ROLAP更多的时间,查询效率比ROLAP高，但低于MOLAP。</li>
+</ol>
+</blockquote>
+<p>每个维度至少使用一个表在存放堆数据，成员等描述信息，维度和事实表通过主关键字和外关键字形成星型模式，多个表来描述星型模型扩展称为雪花模型。<br>星型模式的Hive表，个人理解就是事实表数据，对应的就是关系型数据结果。</p>
+<blockquote>
+<p>其它概念</p>
+<ol>
+<li>Data Warehouse 数据仓库</li>
+<li>Business Intelligence 商业智能</li>
+<li>Star Schema 星型模型</li>
+<li>Fact Table 事实表</li>
+<li>Lookup Table 查找表</li>
+<li>Dimension 维度（人，产品，地点和时间）</li>
+<li>Measure 度量（例如，总和，计数，平均值，最小值，最大值）的属性</li>
+<li>Table - This is definition of hive tables as source of cubes, which must be synced before building cubes. 这是将hive表定义为多维数据集的源，必须在构建多维数据集之前同步。</li>
+<li>Data Model - This describes a STAR SCHEMA data model, which defines fact/lookup tables and filter condition. 数据模型 - 它描述了一个STAR SCHEMA数据模型，它定义了事实/查找表和过滤条件。</li>
+<li>Cube Descriptor - This describes definition and settings for a cube instance, defining which data model to use, what dimensions and measures to have, how to partition to segments and how to handle auto-merge etc. 描述多维数据集实例的定义和设置，定义要使用的数据模型，具有的维度和度量，如何分区到段以及如何处理自动合并等。</li>
+<li>Cube Instance - This is instance of cube, built from one cube descriptor, and consist of one or more cube segments according partition settings. 这是多维数据集的实例，由一个多维数据集描述符构建，并根据分区设置由一个或多个多维数据集段组成。</li>
+<li>Partition - User can define a DATE/STRING column as partition column on cube descriptor, to separate one cube into several segments with different date periods.用户可以将DATE / STRING列定义为多维数据集描述符上的分区列，以将一个多维数据集分成具有不同日期段的多个段。</li>
+<li>Cube Segment - This is actual carrier of cube data, and maps to a HTable in HBase. One building job creates one new segment for the cube instance. Once data change on specified data period, we can refresh related segments to avoid rebuilding whole cube. 这是多维数据集数据的实际载体，并映射到HBase中的HTable。一个构建作业为多维数据集实例创建一个新段。一旦数据在指定数据期间发生变化，我们就可以刷新相关的段以避免重建整个多维数据集。</li>
+<li>Aggregation Group - Each aggregation group is subset of dimensions, and build cuboid with combinations inside. It aims at pruning for optimization. 每个聚合组都是维度的子集，并使用内部组合构建长方体。它旨在修剪优化。</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>基本结构</p>
+<ol>
+<li>Kylin从Hadoop、Hive、Kafka、RDBMS、中获取数据通过Cube Build Engine构建数据立方体存储数到HBase。</li>
+<li>Kylin内部提供查询引擎对外提供数据查询接口。</li>
+<li>元数据（Metadata）引擎，查询引擎，Job引擎及存储引擎等，同时包括REST服务器以响应客户端请求。</li>
+</ol>
+</blockquote>
+<p>Kylin：从Hive查询数据。<br>事实表，用来存储数据和维关键字。对应则是原始数据和数据中某些关键字段值，维关键字等价于foreign key的列。（外键列）<br>查找表，替换运行时计算的数组索引，对事实表某些列的扩充说明字段。<br>事实表位于星型模型的中间，多个事实表构成事实星座图。</p>
+<p>星型模型和雪花模式都只有一个事实表。</p>
+<p>Measure度量，度量是一个可计算的属性，例如求和，计算数量，取平均值。<br>Dimenssion维，简单的理解就是提供给数据分析观察方向，X轴，Y轴。维度是对事实和度量进行分类的结构，以便使用户能够回答业务问题。通常使用的维度是人员、产品、地点和时间</p>
+<p>银行对存款记账，A表中存放实际数据，包括账号、所属机构号、存款金额等，B表存放机构号和机构名称的对应关系。则A是事实表，B是维表。</p>
+<p>事实表存储原始数据，某些外键可以作为维度列<br>查找表，其实就是那个外键的在另外一个表示主键，查找对应关系，<br>度量，就是把事实表中的某些可计算字段，计算出来的结果列。<br>维度，就是把事实表中的外键和度量计算出的结果列作为一个图表里面的横坐标轴。<br>维度的基数（Cardinality），指的是该维度在数据集中出现的不同值的个数；例如“国家”是一个维度，如果有200个不同的值，那么此维度的基数就是200。通常一个维度的基数会从几十到几万个不等，个别维度如“用户ID”的基数会超过百万甚至千万。基数超过一百万的维度通常被称为超高基数维度（Ultra High Cardinality，UHC），需要引起设计者的注意。</p>
+<p>选择维度列时，维度可以来自事实表或维度表。选择度量列时，度量只能来自事实表</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/07/杂项/" rel="next" title="杂项">
+                <i class="fa fa-chevron-left"></i> 杂项
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/14/Hive相关/" rel="prev" title="Hive相关">
+                Hive相关 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ideath@operatorworld.com</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ideath@operatorworld.com</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Muse</a> v6.4.2</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

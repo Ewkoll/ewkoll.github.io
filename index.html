@@ -279,6 +279,1338 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="/2019/04/03/Mondrian/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ideath@operatorworld.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ewkoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/03/Mondrian/" itemprop="url">
+                  Mondrian
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-03 09:29:55 / 修改时间：10:37:12" itemprop="dateCreated datePublished" datetime="2019-04-03T09:29:55+08:00">2019-04-03</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="1-What-is-a-schema"><a href="#1-What-is-a-schema" class="headerlink" title="1. What is a schema?"></a>1. What is a schema?</h2><ul>
+<li><p>schema 个人理解就是一种对关系模型的描述。</p>
+</li>
+<li><p>A schema defines a multi-dimensional database. It contains a logical model, consisting of cubes, hierarchies, and members, and a mapping of this model onto a physical model. 模型形态定义了一种多维数据库，包含逻辑模型，立方体（多维数据集），层次结构，成员组成，以及这个模型到物理模型的映射。</p>
+</li>
+<li><p>The logical model consists of the constructs used to write queries in MDX language: cubes, dimensions, hierarchies, levels, and members. </p>
+</li>
+<li><p>The physical model is the source of the data which is presented through the logical model. It is typically a star schema, which is a set of tables in a relational database; later, we shall see examples of other kinds of mappings. 物理模型是通过逻辑模型呈现的数据源，它通常是星型模型，在关系型数据库中就是一系列的表。</p>
+</li>
+</ul>
+<h2 id="2-Schema-files"><a href="#2-Schema-files" class="headerlink" title="2. Schema files"></a>2. Schema files</h2><ul>
+<li><p>Mondrian schemas are represented in an XML file. An example schema, containing almost all of the constructs we discuss here, is supplied as demo/FoodMart.xml in the Mondrian distribution. The dataset to populate this schema is also in the distribution. 通过XML文件表示Mondrian模型。</p>
+</li>
+<li><p>Currently, the only way to create a schema is to edit a schema XML file in a text editor. The XML syntax is not too complicated, so this is not as difficult as it sounds, particularly if you use the FoodMart schema as a guiding example.</p>
+</li>
+</ul>
+<h2 id="3-Logical-model"><a href="#3-Logical-model" class="headerlink" title="3. Logical model"></a>3. Logical model</h2><p>The most important components of a schema are cubes, measures, and dimensions: 模型中最重要的组件包含：多维数据集，度量，维度。</p>
+<ul>
+<li><p>A cube is a collection of dimensions and measures in a particular subject area. 一个立方体是在某个子领域维度和度量的集合</p>
+</li>
+<li><p>A measure is a quantity that you are interested in measuring, for example, unit sales of a product, or cost price of inventory items. 一个度量是一个你感兴趣需要测量的指标。</p>
+</li>
+<li><p>A dimension is an attribute, or set of attributes, by which you can divide measures into sub-categories. For example, you might wish to break down product sales by their color, the gender of the customer, and the store in which the product was sold; color, gender, and store are all dimensions. 维度是属性或者属性集。</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;Schema&gt;</span><br><span class="line">    &lt;!-- 立方体名称 --&gt;</span><br><span class="line">    &lt;Cube name=&quot;Sales&quot;&gt;</span><br><span class="line">        &lt;!-- 事实表名称 --&gt;</span><br><span class="line">        &lt;Table name=&quot;sales_fact_1997&quot; /&gt;</span><br><span class="line">        &lt;!-- 性别维度，在事实表中的外键是customer_id，在customer表的主键是customer_id --&gt;</span><br><span class="line">        &lt;Dimension name=&quot;Gender&quot; foreignKey=&quot;customer_id&quot;&gt;</span><br><span class="line">            &lt;Hierarchy hasAll=&quot;true&quot; allMemberName=&quot;All Genders&quot; primaryKey=&quot;customer_id&quot;&gt;</span><br><span class="line">                &lt;Table name=&quot;customer&quot; /&gt;</span><br><span class="line">                &lt;Level name=&quot;Gender&quot; column=&quot;gender&quot; uniqueMembers=&quot;true&quot; /&gt;</span><br><span class="line">            &lt;/Hierarchy&gt;</span><br><span class="line">        &lt;/Dimension&gt;</span><br><span class="line">        &lt;!-- 时间维度 --&gt;</span><br><span class="line">        &lt;Dimension name=&quot;Time&quot; foreignKey=&quot;time_id&quot;&gt;</span><br><span class="line">            &lt;Hierarchy hasAll=&quot;false&quot; primaryKey=&quot;time_id&quot;&gt;</span><br><span class="line">                &lt;Table name=&quot;time_by_day&quot; /&gt;</span><br><span class="line">                &lt;Level name=&quot;Year&quot; column=&quot;the_year&quot; type=&quot;Numeric&quot; uniqueMembers=&quot;true&quot; /&gt;</span><br><span class="line">                &lt;Level name=&quot;Quarter&quot; column=&quot;quarter&quot; uniqueMembers=&quot;false&quot; /&gt;</span><br><span class="line">                &lt;Level name=&quot;Month&quot; column=&quot;month_of_year&quot; type=&quot;Numeric&quot; uniqueMembers=&quot;false&quot; /&gt;</span><br><span class="line">            &lt;/Hierarchy&gt;</span><br><span class="line">        &lt;/Dimension&gt;</span><br><span class="line">        &lt;!-- 单位产品销售额度量，这个值在销售事实表中，因此决定是度量还是维度是人为定义的。--&gt;</span><br><span class="line">        &lt;Measure name=&quot;Unit Sales&quot; column=&quot;unit_sales&quot; aggregator=&quot;sum&quot; formatString=&quot;#,###&quot; /&gt;</span><br><span class="line">        &lt;Measure name=&quot;Store Sales&quot; column=&quot;store_sales&quot; aggregator=&quot;sum&quot; formatString=&quot;#,###.##&quot; /&gt;</span><br><span class="line">        &lt;Measure name=&quot;Store Cost&quot; column=&quot;store_cost&quot; aggregator=&quot;sum&quot; formatString=&quot;#,###.00&quot; /&gt;</span><br><span class="line">        &lt;!-- 计算成员，dimension=&quot;Measures&quot;直接说明此是度量 --&gt;</span><br><span class="line">        &lt;CalculatedMember name=&quot;Profit&quot; dimension=&quot;Measures&quot; formula=&quot;[Measures].[Store Sales] - [Measures].[Store Cost]&quot;&gt;</span><br><span class="line">            &lt;CalculatedMemberProperty name=&quot;FORMAT_STRING&quot; value=&quot;$#,##0.00&quot; /&gt;</span><br><span class="line">        &lt;/CalculatedMember&gt;</span><br><span class="line">    &lt;/Cube&gt;</span><br><span class="line">&lt;/Schema&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT &#123;[Measures].[Unit Sales], [Measures].[Store Sales]&#125; ON COLUMNS, 查询指标度量在列</span><br><span class="line">  &#123;descendants([Time].[1997].[Q1])&#125; ON ROWS 时间维度在行</span><br><span class="line">FROM [Sales] 从多维数据集Sales</span><br><span class="line">WHERE [Gender].[F] 根据性别</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="/2019/03/25/Gitlab相关/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ideath@operatorworld.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ewkoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/25/Gitlab相关/" itemprop="url">
+                  Gitlab相关
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-25 15:37:30 / 修改时间：16:01:15" itemprop="dateCreated datePublished" datetime="2019-03-25T15:37:30+08:00">2019-03-25</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a><a href="https://docs.gitlab.com/omnibus/docker/README.html#run-the-image" target="_blank" rel="noopener">安装</a></h3><p><a href="https://hub.docker.com/r/gitlab/gitlab-ce" target="_blank" rel="noopener">docker hub 地址</a><br>docker pull gitlab/gitlab-ce<br>docker pull store/gitlab/gitlab-ce:10.2.4-ce.0</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run --detach \</span><br><span class="line">    --hostname www.operatorworld.win \</span><br><span class="line">    --publish 443:443 \</span><br><span class="line">    --publish 80:80 \</span><br><span class="line">    --publish 1822:22 \</span><br><span class="line">    --publish 8443:8443 \</span><br><span class="line">    --name gitlab \</span><br><span class="line">    --restart always \</span><br><span class="line">    --volume /home/Gitlab/config:/etc/gitlab \</span><br><span class="line">    --volume /home/Gitlab/logs:/var/log/gitlab \</span><br><span class="line">    --volume /home/Gitlab/data:/var/opt/gitlab \</span><br><span class="line">    store/gitlab/gitlab-ce:10.2.4-ce.0</span><br></pre></td></tr></table></figure>
+<h3 id="中文版本"><a href="#中文版本" class="headerlink" title="中文版本"></a>中文版本</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">获取当前Docker中的安装版本</span><br><span class="line">gitlab_version=$(cat /opt/gitlab/embedded/service/gitlab-rails/VERSION)</span><br><span class="line"></span><br><span class="line">Clone对应全镜像</span><br><span class="line">git clone https://gitlab.com/xhang/gitlab.git</span><br><span class="line"></span><br><span class="line">切换目录</span><br><span class="line">cd gitlab</span><br><span class="line"></span><br><span class="line">生成对应版本的中文对比文件</span><br><span class="line">git diff v$&#123;gitlab_version&#125; v$&#123;gitlab_version&#125;-zh &gt; ../$&#123;gitlab_version&#125;-zh.diff</span><br><span class="line"></span><br><span class="line">停止Gitlab</span><br><span class="line">gitlab-ctl stop</span><br><span class="line"></span><br><span class="line">导入汉化文件</span><br><span class="line">patch -d /opt/gitlab/embedded/service/gitlab-rails -p1 &lt; ../11.0.1-zh.diff</span><br><span class="line"></span><br><span class="line">重配置</span><br><span class="line">gitlab-ctl reconfigure</span><br><span class="line"></span><br><span class="line">然后启动gitlab</span><br><span class="line">gitlab-ctl start</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="/2019/03/14/Hive相关/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ideath@operatorworld.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ewkoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/14/Hive相关/" itemprop="url">
+                  Hive相关
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-14 16:59:33" itemprop="dateCreated datePublished" datetime="2019-03-14T16:59:33+08:00">2019-03-14</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-15 11:17:20" itemprop="dateModified" datetime="2019-03-15T11:17:20+08:00">2019-03-15</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://cwiki.apache.org/confluence/display/Hive/GettingStarted" target="_blank" rel="noopener">Hive</a></p>
+<ol>
+<li>解压设置环境变量<br>tar -zxvf apache-hive-2.3.4-bin.tar.gz</li>
+</ol>
+<p>export HIVE_HOME=/home/hive/apache-hive-2.3.4-bin<br>export HIVE_CONF_DIR=$HIVE_HOME/conf<br>export PATH=$HIVE_HOME/bin:${PATH}</p>
+<ol start="2">
+<li><p>创建目录<br>hadoop fs -mkdir /tmp<br>hadoop fs -mkdir -p /user/hive/warehouse<br>hadoop fs -chmod g+w /tmp<br>hadoop fs -chmod g+w /user/hive/warehouse</p>
+</li>
+<li><p>修改hive配置文件<br>修改${system:java.io.tmpdir}为另外的777权限下的目录。<br>修改${system:user.name}为执行程序的用户名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;property</span><br><span class="line">    &lt;name&gt;javax.jdo.option.ConnectionDriverName&lt;/name</span><br><span class="line">    &lt;value&gt;com.mysql.jdbc.Driver&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;  </span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;javax.jdo.option.ConnectionURL&lt;/name&gt;</span><br><span class="line">    &lt;!--&lt;value&gt;jdbc:derby:;databaseName=metastore_db;create=true&lt;/value&gt;--&gt;</span><br><span class="line">    &lt;value&gt;jdbc:mysql://192.168.7.229:3306/hive?createDatabaseIfNotExist=true&amp;amp;useSSL=false&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;javax.jdo.option.ConnectionUserName&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;root&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;javax.jdo.option.ConnectionPassword&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;*******&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<img src="/2019/03/14/Hive相关/1.png">
+<img src="/2019/03/14/Hive相关/2.png">
+<p>XML中配置JDBC连接符号中&amp;需要转义成&amp;</p>
+<p>最后需要把MYSQL的连接驱动JDBC包放到Hive对应的Lib目录下。<a href="https://cdn.mysql.com//Downloads/Connector-J/mysql-connector-java-5.1.47.tar.gz" target="_blank" rel="noopener">地址</a></p>
+<ol start="4">
+<li><p>初始化数据库<br>schematool -dbType mysql -initSchema</p>
+</li>
+<li><p>测试<br>hive命令启动，默认配置创建的数据库在当前程序在的目录。<br>hiveserver2<br>beeline -u jdbc:hive2://localhost:10000</p>
+</li>
+<li><p>DML操作<br>LOAD DATA LOCAL INPATH ‘./examples/files/kv1.txt’ OVERWRITE INTO TABLE pokes;<br>载入用ctrl-a分隔的文件。<br>LOCAL 没有指定将会从HDFS查找文件，如果有将移动到Hive所在的命名空间目录下。<br>OVERWRITE 表示存在的数据将会被删除，如果没有设置将会追加数据在表下。<br>Load命令不验证数据。<br>在载入数据前，先在HDFS创建好对应hive配置的目录。</p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="/2019/03/12/Apache-Kylin/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ideath@operatorworld.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ewkoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/12/Apache-Kylin/" itemprop="url">
+                  Apache Kylin
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-12 16:48:45" itemprop="dateCreated datePublished" datetime="2019-03-12T16:48:45+08:00">2019-03-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-19 11:22:55" itemprop="dateModified" datetime="2019-03-19T11:22:55+08:00">2019-03-19</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>提供Hadoop/Spark之上的SQL查询接口及多维分析能力以支持超大规模数据，亚秒内查询巨大的Hive表。</p>
+</blockquote>
+<p>Kylin实现秒级查询的关键点是预计算，对于超大数据集的复杂查询，既然现场计算需要花费较长时间，那么根据空间换时间的原理，我们就可以提前将所有可能的计算结果计算并存储下来，把高复杂度的聚合运算、多表连接等操作转换成对预计算结果的查询，比如把本该进行的Join、Sum、CountDistinct等操作改写成Cube的查询操作。从而实现超大数据集的秒级多维分析查询。<br>-简单的说就是把要计算的指标先计算后存储到数据库，然后提供查询机制。</p>
+<p>REST Server:<br>REST Server是一套面向应用程序开发的入口点，旨在实现针对Kylin平台的应用开发工作。 此类应用程序可以提供查询、获取结果、触发cube构建任务、获取元数据以及获取用户权限等等。 另外可以通过Restful接口实现SQL查询。</p>
+<p>查询引擎（Query Engine）:<br>当cube准备就绪后，查询引擎就能够获取并解析用户查询。它随后会与系统中的其它组件进行交互，从而向用户返回对应的结果。<br>在Kylin当中，我们使用一套名为Apache Calcite的开源动态数据管理框架对代码内的SQL以及其它插入内容进行解析。</p>
+<p>Routing<br>负责将解析的SQL生成的执行计划转换成cube缓存的查询，cube是通过预计算缓存在hbase中，这部分查询可以在秒级设置毫秒级完成，而且还有一些操作使用过的查询原始数据（存储在Hadoop的hdfs中通过hive查询）。这部分查询延迟较高。</p>
+<p>元数据管理工具（Metadata Manager）<br>Kylin是一款元数据驱动型应用程序。元数据管理工具是一大关键性组件，用于对保存在Kylin当中的所有元数据进行管理，其中包括最为重要的cube元数据。其它全部组件的正常运作都需以元数据管理工具为基础。 Kylin的元数据存储在hbase中。</p>
+<p>任务引擎（Cube Build Engine）:<br>这套引擎的设计目的在于处理所有离线任务，其中包括shell脚本、Java API以及Map Reduce任务等等。任务引擎对Kylin当中的全部任务加以管理与协调，从而确保每一项任务都能得到切实执行并解决其间出现的故障。其实就是任务调度和分配。</p>
+<p>存储引擎（Storage Engine）<br>这套引擎负责管理底层存储——特别是cuboid，其以键-值对的形式进行保存。存储引擎使用的是HBase——这是目前Hadoop生态系统当中最理想的键-值系统使用方案。Kylin还能够通过扩展实现对其它键-值系统的支持，例如Redis。</p>
+<p>Kylin的三大依赖模块分别是数据源、构建引擎和存储引擎。默认这三者分别是Hive、MapReduce和HBase。但随着推广和使用的深入，渐渐有用户发现它们均存在不足之处。比如，实时分析可能会希望从Kafka导入数据而不是从Hive；而Spark的迅速崛起，又使我们不得不考虑将MapReduce替换为Spark，以期大幅提高Cube的构建速度；至于HBase，它的读性能可能还不如Cassandra或Kudu等。因此Kylin1.5版本的系统架构进行了重构，将数据源、构建引擎、存储引擎三大依赖抽象为接口，而Hive、MapReduce、HBase只是默认实现。深度用户可以根据自己的需要做二次开发，将其中的一个或多个替换为更适合的技术。</p>
+<ol>
+<li>百亿规模数查询效率</li>
+<li>支撑大部分查询SQL功能</li>
+<li>定义数据模型构建立方体</li>
+</ol>
+<blockquote>
+<p>支撑的BI工具</p>
+<ol>
+<li><a href="https://www.tableau.com/zh-cn/products/trial" target="_blank" rel="noopener">Tableau</a></li>
+<li><a href="https://www.microstrategy.cn/cn" target="_blank" rel="noopener">MSTR</a></li>
+<li><a href="https://www.qlik.com/us/products/qlik-sense" target="_blank" rel="noopener">QlikSense</a></li>
+<li><a href="https://superset.incubator.apache.org/" target="_blank" rel="noopener">Superset-开源</a></li>
+<li><a href="https://github.com/cloudera/hue" target="_blank" rel="noopener">Hue-开源</a></li>
+</ol>
+</blockquote>
+<blockquote>
+<p>其它一些BI工具</p>
+<ol>
+<li><a href="https://github.com/grafana/grafana" target="_blank" rel="noopener">grafana</a> 是一个开源的时序性统计和监控平台-时间序列。</li>
+<li>[Superset] 静态报表更好。</li>
+<li>[FineBI] 国内商业BI报表。</li>
+<li><a href="https://edp963.github.io/davinci/" target="_blank" rel="noopener">Davinci</a> 宜信技术研发中心-数据源MYSQL-CSV文件</li>
+<li><a href="https://zeppelin.apache.org/" target="_blank" rel="noopener">Zeppelin</a> 可以跟Spark结合，开源项目</li>
+<li><a href="https://franchise.cloud/" target="_blank" rel="noopener">Franchise</a> 看不出什么优点</li>
+<li><a href="https://redash.io/" target="_blank" rel="noopener">Redash</a> 开源项目</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>基本概念</p>
+<ol>
+<li>OLAP（On-line Analytical Processing） Cube 多维模型中事实表（Fact Table）。</li>
+<li>OLAP的多维分析操作包括：钻取（Drill-down）、上卷（Roll-up）、切片（Slice）、切块（Dice）、旋转（Pivot）。</li>
+<li>度量（Measure）用于描述事件的数字尺度。</li>
+<li>计算度量（Calculated Measure）通过度量计算后的结果，比如：同比利润，环比利润，利率变化。</li>
+<li>自上而下的钻取、自下而上地聚合。</li>
+<li>维（Dimension）、层次（Hierarchy）</li>
+<li>LDAP（Lightweight Directory Access Protocol）轻量目录访问协议。</li>
+<li>SSO（Single sign-on）单一登录。</li>
+<li><a href="https://zhuanlan.zhihu.com/p/26562588" target="_blank" rel="noopener">HyperLogLog</a>基数统计，去重后结果总数。</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>ROLAP、MOLAP和HOLAP联机分析处理区别</p>
+<ol>
+<li>ROLAP(Relational OLAP) 关系型数据库联机分析 - 特点是将细节数据保留在关系型数据库的事实表中，聚合后的数据也保存在关系型的数据库中。</li>
+<li>MOLAP(Multidimensional OLAP) 多维数据联机分析（KYLIN）- 特点是将细节数据和聚合后的数据均保存在cube中，所以以空间换效率，查询时效率高，但生成cube时需要大量的时间和空间。</li>
+<li>HOLAP(Hybrid OLAP) 混合数据组织OLAP实现 - 特点是将细节数据保留在关系型数据库的事实表中，但是聚合后的数据保存在cube中,聚合时需要比ROLAP更多的时间,查询效率比ROLAP高，但低于MOLAP。</li>
+</ol>
+</blockquote>
+<p>每个维度至少使用一个表在存放堆数据，成员等描述信息，维度和事实表通过主关键字和外关键字形成星型模式，多个表来描述星型模型扩展称为雪花模型。<br>星型模式的Hive表，个人理解就是事实表数据，对应的就是关系型数据结果。</p>
+<blockquote>
+<p>其它概念</p>
+<ol>
+<li>Data Warehouse 数据仓库</li>
+<li>Business Intelligence 商业智能</li>
+<li>Star Schema 星型模型</li>
+<li>Fact Table 事实表</li>
+<li>Lookup Table 查找表</li>
+<li>Dimension 维度（人，产品，地点和时间）</li>
+<li>Measure 度量（例如，总和，计数，平均值，最小值，最大值）的属性</li>
+<li>Table - This is definition of hive tables as source of cubes, which must be synced before building cubes. 这是将hive表定义为多维数据集的源，必须在构建多维数据集之前同步。</li>
+<li>Data Model - This describes a STAR SCHEMA data model, which defines fact/lookup tables and filter condition. 数据模型 - 它描述了一个STAR SCHEMA数据模型，它定义了事实/查找表和过滤条件。</li>
+<li>Cube Descriptor - This describes definition and settings for a cube instance, defining which data model to use, what dimensions and measures to have, how to partition to segments and how to handle auto-merge etc. 描述多维数据集实例的定义和设置，定义要使用的数据模型，具有的维度和度量，如何分区到段以及如何处理自动合并等。</li>
+<li>Cube Instance - This is instance of cube, built from one cube descriptor, and consist of one or more cube segments according partition settings. 这是多维数据集的实例，由一个多维数据集描述符构建，并根据分区设置由一个或多个多维数据集段组成。</li>
+<li>Partition - User can define a DATE/STRING column as partition column on cube descriptor, to separate one cube into several segments with different date periods.用户可以将DATE / STRING列定义为多维数据集描述符上的分区列，以将一个多维数据集分成具有不同日期段的多个段。</li>
+<li>Cube Segment - This is actual carrier of cube data, and maps to a HTable in HBase. One building job creates one new segment for the cube instance. Once data change on specified data period, we can refresh related segments to avoid rebuilding whole cube. 这是多维数据集数据的实际载体，并映射到HBase中的HTable。一个构建作业为多维数据集实例创建一个新段。一旦数据在指定数据期间发生变化，我们就可以刷新相关的段以避免重建整个多维数据集。</li>
+<li>Aggregation Group - Each aggregation group is subset of dimensions, and build cuboid with combinations inside. It aims at pruning for optimization. 每个聚合组都是维度的子集，并使用内部组合构建长方体。它旨在修剪优化。</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>基本结构</p>
+<ol>
+<li>Kylin从Hadoop、Hive、Kafka、RDBMS、中获取数据通过Cube Build Engine构建数据立方体存储数到HBase。</li>
+<li>Kylin内部提供查询引擎对外提供数据查询接口。</li>
+<li>元数据（Metadata）引擎，查询引擎，Job引擎及存储引擎等，同时包括REST服务器以响应客户端请求。</li>
+</ol>
+</blockquote>
+<p>Kylin：从Hive查询数据。<br>事实表，用来存储数据和维关键字。对应则是原始数据和数据中某些关键字段值，维关键字等价于foreign key的列。（外键列）<br>查找表，替换运行时计算的数组索引，对事实表某些列的扩充说明字段。<br>事实表位于星型模型的中间，多个事实表构成事实星座图。</p>
+<p>星型模型和雪花模式都只有一个事实表。</p>
+<p>Measure度量，度量是一个可计算的属性，例如求和，计算数量，取平均值。<br>Dimenssion维，简单的理解就是提供给数据分析观察方向，X轴，Y轴。维度是对事实和度量进行分类的结构，以便使用户能够回答业务问题。通常使用的维度是人员、产品、地点和时间</p>
+<p>银行对存款记账，A表中存放实际数据，包括账号、所属机构号、存款金额等，B表存放机构号和机构名称的对应关系。则A是事实表，B是维表。</p>
+<p>事实表存储原始数据，某些外键可以作为维度列<br>查找表，其实就是那个外键的在另外一个表示主键，查找对应关系，<br>度量，就是把事实表中的某些可计算字段，计算出来的结果列。<br>维度，就是把事实表中的外键和度量计算出的结果列作为一个图表里面的横坐标轴。<br>维度的基数（Cardinality），指的是该维度在数据集中出现的不同值的个数；例如“国家”是一个维度，如果有200个不同的值，那么此维度的基数就是200。通常一个维度的基数会从几十到几万个不等，个别维度如“用户ID”的基数会超过百万甚至千万。基数超过一百万的维度通常被称为超高基数维度（Ultra High Cardinality，UHC），需要引起设计者的注意。</p>
+<p>选择维度列时，维度可以来自事实表或维度表。选择度量列时，度量只能来自事实表</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="/2019/03/07/杂项/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ideath@operatorworld.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ewkoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/07/杂项/" itemprop="url">
+                  杂项
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-07 09:33:14" itemprop="dateCreated datePublished" datetime="2019-03-07T09:33:14+08:00">2019-03-07</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-26 14:08:47" itemprop="dateModified" datetime="2019-03-26T14:08:47+08:00">2019-03-26</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="一些有得没得"><a href="#一些有得没得" class="headerlink" title="一些有得没得"></a>一些有得没得</h3><p>docker run -rm 表示Automatically remove the container when it exits</p>
+<p>docker run –privileged 表示Give extended privileges to this container </p>
+<p>docker run -u 设置容器的用户 Username or UID (format: &lt;name|uid&gt;[:&lt;group|gid&gt;])</p>
+<p>docker run -i, –interactive 交互性Keep STDIN open even if not attached</p>
+<p>docker run -t, –tty 分配终端Allocate a pseudo-TTY</p>
+<p>docker run -d, –detach 表示Run container in background and print container ID</p>
+<p>docker build –network string 表示构建时候网络Set the networking mode for the RUN instructions during build (default “default”)</p>
+<p>groupadd group_docker<br>usermod -s /sbin/nologin user_docker<br>useradd -s /sbin/nologin -g group_docker user_docker<br>yum install net-tools</p>
+<p>删除文件恢复<br>git status<br>git reset HEAD<br>git checkout .</p>
+<p>更新时间<br>ntpdate time.windows.com</p>
+<p>修改时区<br>ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</p>
+<p>时区选择<br>tzselect</p>
+<p>JDBC问题<br>访问最新8.0.15版本的MYSQL使用5.1.24的JDBC会出现异常java.math.BigInteger cannot be cast to java.lang.Integer</p>
+<p>删除无用文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line">setlocal enabledelayedexpansion</span><br><span class="line">set today=%date:~4,10% %time:~0,8%</span><br><span class="line">set path=%cd%</span><br><span class="line"></span><br><span class="line">echo %today% &gt;&gt; delete.log</span><br><span class="line">echo ***start delete*** &gt;&gt; delete.log</span><br><span class="line"></span><br><span class="line">set a0=&quot;.tmp&quot;</span><br><span class="line">set a1=&quot;._mp&quot;</span><br><span class="line">set a2=&quot;.log&quot;</span><br><span class="line">set a3=&quot;.gid&quot;</span><br><span class="line">set a4=&quot;.chk&quot;</span><br><span class="line">set a5=&quot;.old&quot;</span><br><span class="line">set a6=&quot;.obj&quot;</span><br><span class="line">set a7=&quot;.idb&quot;</span><br><span class="line">set a8=&quot;.pdb&quot;</span><br><span class="line">set a9=&quot;.tlog&quot;</span><br><span class="line">for /r %path% %%s in (*.tmp, *._mp, *.log, *.gid, *.chk, *.old, *.obj, *.idb, *.pdb, *.tlog) do (</span><br><span class="line">	set var=%%s</span><br><span class="line">	set suffix=!var:~-4,4!</span><br><span class="line">	if &quot;!suffix!&quot;==%a0% (</span><br><span class="line">		&gt;&gt; filelists.txt echo %%s</span><br><span class="line">	)</span><br><span class="line">	if &quot;!suffix!&quot;==%a1% (</span><br><span class="line">		&gt;&gt; filelists.txt echo %%s</span><br><span class="line">	)</span><br><span class="line">	if &quot;!suffix!&quot;==%a2% (</span><br><span class="line">		&gt;&gt; filelists.txt echo %%s</span><br><span class="line">	)</span><br><span class="line">	if &quot;!suffix!&quot;==%a3% (</span><br><span class="line">		&gt;&gt; filelists.txt echo %%s</span><br><span class="line">	)</span><br><span class="line">	if &quot;!suffix!&quot;==%a4% (</span><br><span class="line">		&gt;&gt; filelists.txt echo %%s</span><br><span class="line">	)</span><br><span class="line">	if &quot;!suffix!&quot;==%a5% (</span><br><span class="line">		&gt;&gt; filelists.txt echo %%s</span><br><span class="line">	)</span><br><span class="line">	if &quot;!suffix!&quot;==%a6% (</span><br><span class="line">		&gt;&gt; filelists.txt echo %%s</span><br><span class="line">	)</span><br><span class="line">	if &quot;!suffix!&quot;==%a7% (</span><br><span class="line">		&gt;&gt; filelists.txt echo %%s</span><br><span class="line">	)</span><br><span class="line">	if &quot;!suffix!&quot;==%a8% (</span><br><span class="line">		&gt;&gt; filelists.txt echo %%s</span><br><span class="line">	)</span><br><span class="line">	set suffix=!var:~-5,5!</span><br><span class="line">	if &quot;!suffix!&quot;==%a9% (</span><br><span class="line">		&gt;&gt; filelists.txt echo %%s</span><br><span class="line">	)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">set count=0</span><br><span class="line">set /p choice=please select after check filelists.txt(y.Yes n.No)</span><br><span class="line">If /i %choice%==y (</span><br><span class="line">    for /f &quot;delims=&quot; %%i in (filelists.txt) do (</span><br><span class="line">        &gt;&gt; delete.log echo %%i</span><br><span class="line">        del /f /s /q &quot;%%i&quot;</span><br><span class="line">        set /a count+=1</span><br><span class="line">    )</span><br><span class="line">) else (</span><br><span class="line">    Exit</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">echo ***Successful(total: %count%)*** &gt;&gt; delete.log</span><br><span class="line">del /f /s /q &quot;filelists.txt&quot;</span><br><span class="line">echo= &gt;&gt; delete.log</span><br></pre></td></tr></table></figure></p>
+<p>清理图标缓存<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">rem close explorer.exe</span><br><span class="line"></span><br><span class="line">taskkill /f /im explorer.exe</span><br><span class="line"></span><br><span class="line">rem clean icon db</span><br><span class="line"></span><br><span class="line">attrib -h -s -r &quot;%userprofile%\AppData\Local\IconCache.db&quot;</span><br><span class="line"></span><br><span class="line">del /f &quot;%userprofile%\AppData\Local\IconCache.db&quot;</span><br><span class="line"></span><br><span class="line">attrib /s /d -h -s -r &quot;%userprofile%\AppData\Local\Microsoft\Windows\Explorer\*&quot;</span><br><span class="line"></span><br><span class="line">del /f &quot;%userprofile%\AppData\Local\Microsoft\Windows\Explorer\thumbcache_32.db&quot;</span><br><span class="line">del /f &quot;%userprofile%\AppData\Local\Microsoft\Windows\Explorer\thumbcache_96.db&quot;</span><br><span class="line">del /f &quot;%userprofile%\AppData\Local\Microsoft\Windows\Explorer\thumbcache_256.db&quot;</span><br><span class="line">del /f &quot;%userprofile%\AppData\Local\Microsoft\Windows\Explorer\thumbcache_1024.db&quot;</span><br><span class="line">del /f &quot;%userprofile%\AppData\Local\Microsoft\Windows\Explorer\thumbcache_idx.db&quot;</span><br><span class="line">del /f &quot;%userprofile%\AppData\Local\Microsoft\Windows\Explorer\thumbcache_sr.db&quot;</span><br><span class="line"></span><br><span class="line">rem clean TrayNotify</span><br><span class="line"></span><br><span class="line">echo y|reg delete &quot;HKEY_CLASSES_ROOT\Local Settings\Software\Microsoft\Windows\CurrentVersion\TrayNotify&quot; /v IconStreams</span><br><span class="line">echo y|reg delete &quot;HKEY_CLASSES_ROOT\Local Settings\Software\Microsoft\Windows\CurrentVersion\TrayNotify&quot; /v PastIconsStream</span><br><span class="line"></span><br><span class="line">rem restart explorer.exe</span><br><span class="line"></span><br><span class="line">start explorer</span><br></pre></td></tr></table></figure></p>
+<p>代理插件下载地址<a href="https://github.com/FelisCatus/SwitchyOmega/releases" target="_blank" rel="noopener">Proxy SwitchyOmega</a></p>
+<p>Windows开始窗口默认显示10列，右键-属性-开始菜单-自定义修改</p>
+<p>Git 设置Socks5代理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">git remote -v</span><br><span class="line"></span><br><span class="line">git config --global http.proxy socks5://127.0.0.1:1080</span><br><span class="line">git config --global https.proxy socks5://127.0.0.1:1080</span><br><span class="line"></span><br><span class="line">git config --global --get http.proxy </span><br><span class="line">git config --global --get https.proxy </span><br><span class="line"></span><br><span class="line">git config --global --unset http.proxy </span><br><span class="line">git config --global --unset https.proxy </span><br><span class="line"></span><br><span class="line">x/tools部分通过github下载到对应目录。</span><br><span class="line">go get -u -v github.com/nsf/gocode</span><br><span class="line">go get -u -v github.com/uudashr/gopkgs/cmd/gopkgs</span><br><span class="line">go get -u github.com/golang/dep/cmd/dep</span><br><span class="line"></span><br><span class="line">:: 使用git pull更新</span><br><span class="line">go get -u -v github.com/ramya-rao-a/go-outline</span><br><span class="line">go get -u -v github.com/acroca/go-symbols</span><br><span class="line">go get -u -v github.com/josharian/impl	</span><br><span class="line"></span><br><span class="line">:: 更新tools在切换到合适的分支版本</span><br><span class="line">go get -u -v golang.org/x/tools/cmd/guru</span><br><span class="line">go get -u -v golang.org/x/tools/cmd/gorename</span><br><span class="line"></span><br><span class="line">go get -u -v github.com/fatih/gomodifytags</span><br><span class="line">go get -u -v github.com/haya14busa/goplay/cmd/goplay</span><br><span class="line">go get -u -v github.com/rogpeppe/godef </span><br><span class="line"></span><br><span class="line">go get -u -v sourcegraph.com/sqs/goreturns </span><br><span class="line">go get -u -v golang.org/x/lint/golint</span><br><span class="line"></span><br><span class="line">go get -u -v github.com/cweill/gotests/... </span><br><span class="line">go get -u -v github.com/derekparker/delve/cmd/dlv </span><br><span class="line"></span><br><span class="line">安装Golint，把下载的golint代码移动到x/tools目录下，执行对应的go install</span><br><span class="line">go install github.com/nsf/gocode</span><br><span class="line">go install github.com/uudashr/gopkgs/cmd/gopkgs</span><br><span class="line">go install github.com/ramya-rao-a/go-outline</span><br><span class="line">go install github.com/acroca/go-symbols</span><br><span class="line">go install golang.org/x/tools/cmd/guru</span><br><span class="line">go install golang.org/x/tools/cmd/gorename</span><br><span class="line">go install github.com/fatih/gomodifytags</span><br><span class="line">go install github.com/haya14busa/goplay/cmd/goplay</span><br><span class="line">go install github.com/josharian/impl</span><br><span class="line">go install github.com/rogpeppe/godef </span><br><span class="line">go install sourcegraph.com/sqs/goreturns </span><br><span class="line">go install github.com/golang/lint/golint </span><br><span class="line">go install github.com/cweill/gotests/... </span><br><span class="line">go install github.com/derekparker/delve/cmd/dlv </span><br><span class="line">go install github.com/golang/dep/cmd/dep</span><br></pre></td></tr></table></figure></p>
+<p>vim /etc/hosts<br>hostname 设置主机名称</p>
+<p>chkconfig –list<br>chkconfig memsql-ops off<br>chkconfig –del memsql-ops<br>yum erase postgresql95</p>
+<h3 id="阿里MVN配置"><a href="#阿里MVN配置" class="headerlink" title="阿里MVN配置"></a>阿里MVN配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;mirror&gt; </span><br><span class="line">	&lt;id&gt;alimaven&lt;/id&gt; </span><br><span class="line">	&lt;name&gt;aliyun maven&lt;/name&gt; </span><br><span class="line">	&lt;url&gt;http://maven.aliyun.com/nexus/content/groups/public/&lt;/url&gt; </span><br><span class="line">	&lt;mirrorOf&gt;central&lt;/mirrorOf&gt; </span><br><span class="line">&lt;/mirror&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="Docker安装"><a href="#Docker安装" class="headerlink" title="Docker安装"></a><a href="https://docs.docker.com/install/linux/docker-ce/centos/" target="_blank" rel="noopener">Docker安装</a></h3><blockquote>
+<p>docker ce 社区版本</p>
+<p>docker ee 企业版本</p>
+</blockquote>
+<ol>
+<li>关于centos-extras存储库开启访问<a href="https://wiki.centos.org/AdditionalResources/Repositories" target="_blank" rel="noopener">此地址</a></li>
+<li>开启<a href="https://docs.docker.com/v17.09/engine/userguide/storagedriver/overlayfs-driver/" target="_blank" rel="noopener">overlay2存储驱动</a></li>
+</ol>
+<h4 id="Install-using-the-repository"><a href="#Install-using-the-repository" class="headerlink" title="Install using the repository"></a>Install using the repository</h4><ol>
+<li>安装需要的包</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install -y yum-utils \                  provides the yum-config-manager utility</span><br><span class="line">    device-mapper-persistent-data lvm2      required by devicemapper</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>设置仓库</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum-config-manager \</span><br><span class="line">    --add-repo \</span><br><span class="line">    https://download.docker.com/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>安装当前最新版本的DOCKER</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">yum install docker-ce docker-ce-cli containerd.io</span><br><span class="line"></span><br><span class="line">If prompted to accept the GPG key, verify that the fingerprint matches </span><br><span class="line"></span><br><span class="line">060A 61C5 1B55 8A7F 742B 77AA C52F EB6B 621E 9F35,</span><br><span class="line"></span><br><span class="line">and if so, accept it.</span><br></pre></td></tr></table></figure>
+<p>当你有多个Docker仓库，执行安装默认会安装最高版本的Docker。</p>
+<p>执行完成后Docker就已经安装好，并且Docker用户组也一并创建，但是没有用户添加到组中。</p>
+<ol start="4">
+<li><p>安装指定版本的Docker</p>
+<p> 列出repo中可用版本yum list docker-ce –showduplicates | sort -r</p>
+ <img src="/2019/03/07/杂项/1.png">
+<p> 执行更新源yum update在执行以上命令。</p>
+ <img src="/2019/03/07/杂项/2.png">
+</li>
+</ol>
+<ol start="5">
+<li><p>启动docker服务</p>
+<p> systemctl start docker</p>
+</li>
+</ol>
+<h4 id="Install-from-a-package"><a href="#Install-from-a-package" class="headerlink" title="Install from a package"></a>Install from a package</h4><ol>
+<li><p>从以下<a href="https://download.docker.com/linux/centos/7/x86_64/stable/Packages/" target="_blank" rel="noopener">地址</a>下载对应版本的docker-ce 和 docker-ce-cli </p>
+</li>
+<li><p>执行安装命令 yum install ./*.rpm 把3个rpm包放在同一个目录执行即可。</p>
+</li>
+<li><p>安装完成执行service docker start，执行docker info。</p>
+</li>
+<li><p>升级docker To upgrade Docker CE, download the newer package file and repeat the installation procedure, using yum -y upgrade instead of yum -y install, and pointing to the new file.</p>
+</li>
+<li><p>usermod -aG docker your-user 把执行用户追加到docker用户组。注销并重新登录才能生效！</p>
+</li>
+</ol>
+<h3 id="Docker网络模型"><a href="#Docker网络模型" class="headerlink" title="Docker网络模型"></a><a href="https://docs.docker.com/network/" target="_blank" rel="noopener">Docker网络模型</a></h3><h3 id="Docker安装MYSQL"><a href="#Docker安装MYSQL" class="headerlink" title="Docker安装MYSQL"></a><a href="https://hub.docker.com/_/mysql" target="_blank" rel="noopener">Docker安装MYSQL</a></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">root权限创建data目录，容器启动会失败，存在数据，重新构建容器也会失败。</span><br><span class="line"></span><br><span class="line">docker pull mysql</span><br><span class="line">docker pull adminer</span><br><span class="line">docker run --restart=always \</span><br><span class="line">           --name docker_mysql \</span><br><span class="line">           -e MYSQL_ROOT_PASSWORD=a123456 \</span><br><span class="line">           -e MYSQL_USER=cboard \</span><br><span class="line">           -e MYSQL_PASSWORD=cboard \</span><br><span class="line">           -e MYSQL_DATABASE=cboard \</span><br><span class="line">           -p 3306:3306 \</span><br><span class="line">           -d \</span><br><span class="line">           -v `pwd`/data:/var/lib/mysql \</span><br><span class="line">           -v `pwd`/conf:/etc/mysql \</span><br><span class="line">           mysql \</span><br><span class="line">           --character-set-server=utf8mb4 \</span><br><span class="line">           --collation-server=utf8mb4_unicode_ci \</span><br><span class="line">           --default-authentication-plugin=mysql_native_password</span><br><span class="line"></span><br><span class="line">docker run --link docker_mysql:mysql --name adminer -p 8888:8080 -d --restart=always adminer</span><br><span class="line"></span><br><span class="line">MYSQL_RANDOM_ROOT_PASSWORD=yes 将会为root用户设置随机密码。</span><br><span class="line">MYSQL_ONETIME_PASSWORD=yes 将会在首次登录的时候强制更改密码。</span><br><span class="line"></span><br><span class="line">docker run -it\</span><br><span class="line">           --link docker_mysql:mysql\</span><br><span class="line">           --rm mysql \</span><br><span class="line">           sh -c &apos;exec mysql -h&quot;$MYSQL_PORT_3306_TCP_ADDR&quot; -P&quot;$MYSQL_PORT_3306_TCP_PORT&quot; -uroot -p&quot;$MYSQL_ENV_MYSQL_ROOT_PASSWORD&quot;&apos;</span><br><span class="line"></span><br><span class="line">docker exec -it docker_mysql bash</span><br><span class="line">docker logs docker_mysql</span><br><span class="line">docker container rm -f docker_mysql</span><br><span class="line">docker ps</span><br><span class="line">dcoker container ls -a</span><br><span class="line"></span><br><span class="line">修改MYSQL密码</span><br><span class="line">ALTER USER &apos;root&apos;@&apos;%&apos; IDENTIFIED WITH mysql_native_password BY &apos;123456&apos;;</span><br></pre></td></tr></table></figure>
+<h3 id="H2存储数据库"><a href="#H2存储数据库" class="headerlink" title="H2存储数据库"></a><a href="http://www.h2database.com/html/main.html" target="_blank" rel="noopener">H2存储数据库</a></h3>
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="/2019/03/06/Hadoop集群环境安装/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ideath@operatorworld.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ewkoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/06/Hadoop集群环境安装/" itemprop="url">
+                  Hadoop集群环境安装
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-06 16:05:53" itemprop="dateCreated datePublished" datetime="2019-03-06T16:05:53+08:00">2019-03-06</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-14 16:44:41" itemprop="dateModified" datetime="2019-03-14T16:44:41+08:00">2019-03-14</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="配置服务器间免密登录"><a href="#配置服务器间免密登录" class="headerlink" title="配置服务器间免密登录"></a>配置服务器间免密登录</h2><ol>
+<li>执行生成密钥命令</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br><span class="line"></span><br><span class="line">默认生成id_rsa的私钥文件和id_rsa.pub的公钥文件。</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>把文件拷贝到需要免密登录的机器</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-copy-id -i id_rsa.pub root@192.168.7.252</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>验证是否可以免密登录</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh root@192.168.7.252</span><br><span class="line">查看authorized_keys文件，文件内部会新增对应的公钥内容</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>The authenticity of host 192.168.0.xxx can’t be established.</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">修改/etc/ssh/ssh_config中的 StrictHostKeyChecking=no</span><br><span class="line">这样第一次登录就不会提示。</span><br></pre></td></tr></table></figure>
+<p>如果需要通过ssh 登录自己的IP免密。在本机把id_rsa.pub公钥拷贝到本机的授权authorized_keys文件中去。</p>
+<h2 id="ZooKeeper"><a href="#ZooKeeper" class="headerlink" title="ZooKeeper"></a><a href="https://zookeeper.apache.org/" target="_blank" rel="noopener">ZooKeeper</a></h2><h3 id="集群生成环境安装"><a href="#集群生成环境安装" class="headerlink" title="集群生成环境安装"></a>集群生成环境安装</h3><blockquote>
+<p>Coordinating Distributed Applications with ZooKeeper 通过ZK协调分布式程序。</p>
+<p>ZK建议的最小集群机器数量是3台，当3台机器的情况允许1台机器进入维护状态。</p>
+<p>如果是5台机器的集群，当1台维护状态的时候，允许4台中的其中1台在发生故障不影响服务运行。</p>
+<p>集群中的5台机器分布在同一个交换机下，如果交换机出现故障，将会导致全部发生异常。</p>
+</blockquote>
+<ol>
+<li>Zk需要JDK1.6以上版本。</li>
+<li>设置Java堆大小。</li>
+</ol>
+<blockquote>
+<p>端口</p>
+<ol>
+<li>2181 服务端口</li>
+<li>2888 集群内部通讯端口</li>
+<li>3888 选举leader端口</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>防火墙<br>firewall-cmd –zone=public –permanent –add-port=2181/tcp –add-port=2888/tcp –add-port=3888/tcp<br>firewall-cmd –reload<br>firewall-cmd –list-ports<br>systemctl enable firewalld<br>systemctl start firewalld</p>
+</blockquote>
+<blockquote>
+<p>配置文件</p>
+<ol>
+<li>在conf目录下新建zoo.cfg文件内容如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tickTime=2000</span><br><span class="line">initLimit=10</span><br><span class="line">syncLimit=5</span><br><span class="line">dataDir=/home/zk/data</span><br><span class="line">clientPort=2181</span><br><span class="line">server.1=master-252.com:2888:3888</span><br><span class="line">server.2=slaves-251.com:2888:3888</span><br><span class="line">server.3=slaves-229.com:2888:3888</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</blockquote>
+<ol start="2">
+<li>scp -r /home/zk <a href="mailto:root@master-252.com" target="_blank" rel="noopener">root@master-252.com</a>:/home/</li>
+<li>在数据目录分别执行echo 1 &gt; myid</li>
+<li>bin/zkServer.sh start</li>
+<li>bin/zkServer.sh stop</li>
+<li>bin/zkServer.sh status</li>
+<li>bin/zkCli.sh -server master-252.com:2181,slaves-251.com:2181,slaves-229.com:2181</li>
+</ol>
+<h2 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a><a href="https://hadoop.apache.org/docs/r2.7.7/hadoop-project-dist/hadoop-common/ClusterSetup.html" target="_blank" rel="noopener">Hadoop</a></h2><ol>
+<li>其中一台机器作为NameNode，另外一台作为ResourceManager，其它机器DataNode和NodeManager作为Slaves。</li>
+</ol>
+<h3 id="Configuring-Hadoop-in-Non-Secure-Mode"><a href="#Configuring-Hadoop-in-Non-Secure-Mode" class="headerlink" title="Configuring Hadoop in Non-Secure Mode"></a>Configuring Hadoop in Non-Secure Mode</h3><p>Hadoop被2种类型配置驱动</p>
+<ol>
+<li>只读配置 core-default.xml, hdfs-default.xml, yarn-default.xml and mapred-default.xml 没找到在哪。</li>
+<li>每个节点配置 etc/hadoop/core-site.xml, etc/hadoop/hdfs-site.xml, etc/hadoop/yarn-site.xml and etc/hadoop/mapred-site.xml.</li>
+<li>每个节点配置 etc/hadoop/hadoop-env.sh and etc/hadoop/yarn-env.sh and  etc/hadoop/mapred-env.sh.</li>
+</ol>
+<p>HDFS daemons are NameNode, SecondaryNameNode, and DataNode.<br>YARN damones are ResourceManager, NodeManager, and WebAppProxy.<br>If MapReduce is to be used, then the MapReduce Job History Server will also be running.<br>[3]配置中必须至少指定JAVA_HOME的环境变量。</p>
+<p>NameNode                        HADOOP_NAMENODE_OPTS<br>DataNode                        HADOOP_DATANODE_OPTS<br>Secondary NameNode                HADOOP_SECONDARYNAMENODE_OPTS<br>ResourceManager                    YARN_RESOURCEMANAGER_OPTS<br>NodeManager                        YARN_NODEMANAGER_OPTS<br>WebAppProxy                        YARN_PROXYSERVER_OPTS<br>Map Reduce Job History Server    HADOOP_JOB_HISTORYSERVER_OPTS<br>Daemons Process Id Files        HADOOP_PID_DIR<br>HDaemons Logs Files Path        HADOOP_LOG_DIR </p>
+<p>配置<br>grep -ri hadoop_deprecate_envvar</p>
+<h3 id="启动Hadoop"><a href="#启动Hadoop" class="headerlink" title="启动Hadoop"></a>启动Hadoop</h3><ol>
+<li><p>先格式化分布式文件系统。<br>$HADOOP_PREFIX/bin/hdfs namenode -format &lt;cluster_name&gt;</p>
+</li>
+<li><p>启动名称节点<br>$HADOOP_PREFIX/sbin/hadoop-daemon.sh –script hdfs start namenode</p>
+</li>
+<li><p>启动数据节点<br>$HADOOP_PREFIX/sbin/hadoop-daemon.sh –script hdfs start datanode</p>
+</li>
+<li><p>启动HDFS合并2和3操作。<br>$HADOOP_PREFIX/sbin/start-dfs.sh</p>
+</li>
+<li><p>停止HDFS。<br>$HADOOP_PREFIX/sbin/stop-dfs.sh</p>
+</li>
+<li><p>打开8088-65535的所有端口<br>firewall-cmd –zone=public –permanent –add-port=8088-65535/tcp<br>firewall-cmd –zone=public –permanent –add-port=8030-8033/tcp<br>firewall-cmd –zone=public –permanent –add-port=8040/tcp<br>firewall-cmd –zone=public –permanent –add-port=8042/tcp<br>firewall-cmd –zone=public –permanent –add-port=8045-8048/tcp</p>
+</li>
+<li><p>启动资源管理节点<br>$HADOOP_YARN_HOME/sbin/yarn-daemon.sh start resourcemanager</p>
+</li>
+<li><p>启动节点管理<br>$HADOOP_YARN_HOME/sbin/yarn-daemons.sh start nodemanager</p>
+</li>
+<li><p>启动代理服务器<br>$HADOOP_YARN_HOME/sbin/yarn-daemon.sh start proxyserver</p>
+</li>
+<li><p>启动yarn<br>$HADOOP_PREFIX/sbin/start-yarn.sh</p>
+</li>
+<li><p>Start the MapReduce JobHistory Server<br>$HADOOP_PREFIX/sbin/mr-jobhistory-daemon.sh start historyserver</p>
+</li>
+<li><p>获取RM中节点激活状态<br>yarn rmadmin -getServiceState rm1 </p>
+</li>
+<li><p>转移激活状态<br>yarn rmadmin -transitionToActive rm1 </p>
+</li>
+</ol>
+<p><a href="https://hadoop.apache.org/docs/r2.7.7/hadoop-project-dist/hadoop-common/ClusterSetup.html" target="_blank" rel="noopener">Hadoop 集群配置</a><br><a href="https://hadoop.apache.org/docs/r2.7.7/hadoop-yarn/hadoop-yarn-site/ResourceManagerHA.html" target="_blank" rel="noopener">Hadoop Yarn HA 配置</a><br><a href="https://hadoop.apache.org/docs/r2.7.7/hadoop-project-dist/hadoop-hdfs/HDFSHighAvailabilityWithNFS.html" target="_blank" rel="noopener">Hadoop Hdfs HA 配置</a></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="/2019/03/06/Htop安装/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ideath@operatorworld.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ewkoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/06/Htop安装/" itemprop="url">
+                  Htop安装
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-06 16:03:36 / 修改时间：16:05:16" itemprop="dateCreated datePublished" datetime="2019-03-06T16:03:36+08:00">2019-03-06</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="安装Htop"><a href="#安装Htop" class="headerlink" title="安装Htop"></a><a href="http://hisham.hm/htop/index.php?page=downloads" target="_blank" rel="noopener">安装Htop</a></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum -y install epel-release</span><br><span class="line">yum -y install htop</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="/2018/12/20/Java字节码-class文件结构/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -853,1101 +2185,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="/2018/11/26/ES常见问题/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ideath@operatorworld.com">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ewkoll">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/26/ES常见问题/" itemprop="url">
-                  ES常见问题
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-11-26 11:07:10 / 修改时间：11:16:11" itemprop="dateCreated datePublished" datetime="2018-11-26T11:07:10+08:00">2018-11-26</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ul>
-<li><p>ES写入数据可能会出现FORBIDDEN/12/index read-only / allow delete (api)]错误</p>
-  <img src="/2018/11/26/ES常见问题/es.png">
-<p>  <a href="https://discuss.elastic.co/t/forbidden-12-index-read-only-allow-delete-api/110282/3" target="_blank" rel="noopener">相关链接</a></p>
-<p>  这个问题是因为ES的存储空间不够，导致写入数据失败。</p>
-<p>  1、调整存储的磁盘空间。然后重启ES程序。</p>
-<p>  2、执行以下代码。</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PUT _settings</span><br><span class="line">&#123;</span><br><span class="line">    &quot;index&quot;: &#123;</span><br><span class="line">        &quot;blocks&quot;: &#123;</span><br><span class="line">        &quot;read_only_allow_delete&quot;: &quot;false&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="/2018/11/12/Hadoop常见异常/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ideath@operatorworld.com">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ewkoll">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/12/Hadoop常见异常/" itemprop="url">
-                  Hadoop常见异常
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-11-12 09:50:52" itemprop="dateCreated datePublished" datetime="2018-11-12T09:50:52+08:00">2018-11-12</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-11-29 14:18:33" itemprop="dateModified" datetime="2018-11-29T14:18:33+08:00">2018-11-29</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="服务器异常断电的情况下，重启Hadoop会提示块异常进入安全模式。"><a href="#服务器异常断电的情况下，重启Hadoop会提示块异常进入安全模式。" class="headerlink" title="服务器异常断电的情况下，重启Hadoop会提示块异常进入安全模式。"></a>服务器异常断电的情况下，重启Hadoop会提示块异常进入安全模式。</h3><ol>
-<li><p>先执行 hdfs dfsadmin -safemode leave 退出安全模式。</p>
-</li>
-<li><p>后执行 hdfs fsck /logminer/checkpoint/172.17.0.4_12a69c556cad 查看损坏的块。</p>
-</li>
-<li><p>后执行 hdfs fsck -delete /logminer/checkpoint/172.17.0.4_12a69c556cad 对应的块数据。</p>
-</li>
-</ol>
-<h3 id="意外删除副本机器上的Hadoop数据目录解决版本"><a href="#意外删除副本机器上的Hadoop数据目录解决版本" class="headerlink" title="意外删除副本机器上的Hadoop数据目录解决版本"></a>意外删除副本机器上的Hadoop数据目录解决版本</h3><ol>
-<li><p>先从正常的机器拷贝Datanode节点数据到删除的副本机器上。</p>
-</li>
-<li><p>停止在直接启动集群，会出现以下错误。</p>
- <img src="/2018/11/12/Hadoop常见异常/storageid_error.png">
-</li>
-<li><p>修改/home/hadoop/data/dfs/datanode/current/VERSION文件的datanodeUuid，只要改一位就可以。</p>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="/2018/11/08/GO加密模块/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ideath@operatorworld.com">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ewkoll">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/08/GO加密模块/" itemprop="url">
-                  GO加密模块
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-11-08 15:40:29 / 修改时间：18:43:18" itemprop="dateCreated datePublished" datetime="2018-11-08T15:40:29+08:00">2018-11-08</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="常见模块"><a href="#常见模块" class="headerlink" title="常见模块"></a>常见模块</h2><h3 id="Keyed-Hash-Message-Authentication-Code-密钥哈希消息认证码"><a href="#Keyed-Hash-Message-Authentication-Code-密钥哈希消息认证码" class="headerlink" title="Keyed-Hash Message Authentication Code 密钥哈希消息认证码"></a>Keyed-Hash Message Authentication Code 密钥哈希消息认证码</h3><ul>
-<li><p>HMac 使用密钥对消息签名的算法。</p>
-<p>  这个算法，就是在计算哈希的时候，嵌入一个密钥，对MD5,SHA算法都有用，本质上这个算法，就是提供一个SHA(message + salt)的通用计算公式。</p>
-</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">hmacSign</span><span class="params">(key <span class="keyword">string</span>, message <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    mac := hmac.New(md5.New, []<span class="keyword">byte</span>(key))</span><br><span class="line">    mac.Write([]<span class="keyword">byte</span>(message))</span><br><span class="line">    expectedMAC := mac.Sum(<span class="literal">nil</span>)</span><br><span class="line">    fmt.Println(hex.EncodeToString(expectedMAC))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="哈希计算-MD5"><a href="#哈希计算-MD5" class="headerlink" title="哈希计算 MD5"></a>哈希计算 MD5</h3><ul>
-<li>这个没什么说的，不建议使用的方法。</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 计算字符串MD5</span></span><br><span class="line">data := []<span class="keyword">byte</span>(<span class="string">"These pretzels are making me thirsty."</span>)</span><br><span class="line">fmt.Printf(<span class="string">"%x"</span>, md5.Sum(data))</span><br><span class="line"></span><br><span class="line"><span class="comment">// 计算字符串MD5</span></span><br><span class="line">h := md5.New()</span><br><span class="line">h.Write([]<span class="keyword">byte</span>(<span class="string">"These pretzels are making me thirsty."</span>))</span><br><span class="line">io.WriteString(h, <span class="string">"The fog is getting thicker!"</span>)</span><br><span class="line">io.WriteString(h, <span class="string">"And Leon's getting laaarger!"</span>)</span><br><span class="line">fmt.Printf(<span class="string">"%x"</span>, h.Sum(<span class="literal">nil</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">// 计算文件MD5</span></span><br><span class="line">f, err := os.Open(<span class="string">"file.txt"</span>)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">defer</span> f.Close()</span><br><span class="line">h := md5.New()</span><br><span class="line"><span class="keyword">if</span> _, err := io.Copy(h, f); err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Printf(<span class="string">"%x"</span>, h.Sum(<span class="literal">nil</span>))</span><br></pre></td></tr></table></figure>
-<h3 id="随机数生成-rand"><a href="#随机数生成-rand" class="headerlink" title="随机数生成 rand"></a>随机数生成 rand</h3><ul>
-<li><p>在Linux上使用<a href="http://man7.org/linux/man-pages/man2/getrandom.2.html" target="_blank" rel="noopener">getrandom(2)</a> 否则从/dev/urandom获取。</p>
-</li>
-<li><p>By default, getrandom() draws entropy from the urandom source (i.e.,<br> the same source as the /dev/urandom device).  This behavior can be<br> changed via the flags argument.</p>
-</li>
-<li><p>OpenBSD 使用getentropy(2)</p>
-</li>
-<li><p>其它Unix-like systems从/dev/urandom生成</p>
-</li>
-<li><p>Windows上使用CryptGenRandom API生成</p>
-</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nonce := <span class="built_in">make</span>([]<span class="keyword">byte</span>, <span class="number">12</span>)</span><br><span class="line">io.ReadFull(rand.Reader, nonce)</span><br><span class="line"></span><br><span class="line">rand.Read(b)<span class="comment">//此方法等价于上面的调用。</span></span><br></pre></td></tr></table></figure>
-<h3 id="块加密算法-rc4"><a href="#块加密算法-rc4" class="headerlink" title="块加密算法 rc4"></a>块加密算法 rc4</h3><ul>
-<li>不安全的加密算法，不建议使用，这个是加密算法最早用在流式加密中。</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ciper, err := rc4.NewCipher([]<span class="keyword">byte</span>(<span class="string">"HelloWorld"</span>))</span><br><span class="line"><span class="keyword">if</span> <span class="literal">nil</span> != err &#123;</span><br><span class="line">    <span class="built_in">panic</span>(err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">plaintext := <span class="string">"RC4AAAAAAAAAA"</span></span><br><span class="line">buffer := <span class="built_in">make</span>([]<span class="keyword">byte</span>, <span class="built_in">len</span>(plaintext))</span><br><span class="line">ciper.XORKeyStream(buffer, []<span class="keyword">byte</span>(plaintext))</span><br><span class="line">fmt.Println(buffer)</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="/2018/11/02/关于Openresty的一些事情/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ideath@operatorworld.com">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ewkoll">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/02/关于Openresty的一些事情/" itemprop="url">
-                  关于Openresty的一些事情
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-11-02 17:46:30 / 修改时间：18:24:44" itemprop="dateCreated datePublished" datetime="2018-11-02T17:46:30+08:00">2018-11-02</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。"><a href="#在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。" class="headerlink" title="在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。"></a>在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。</h3><ul>
-<li><p>把一些状态存储在lua的对象中，在收到请求的时候把对象内的值修改。这个操蛋的做法有什么问题？</p>
-<ol>
-<li><p>这么做，当前你只有一个nginx工作进程，并且lua_code_cache on;的时候，居然是可以用的。</p>
-</li>
-<li><p>并且在Window环境下，你会发现大部分情况都是居然可以用的。</p>
-</li>
-<li><p>在多个进程的情况下，你处理请求的进程只是其中一个，在修改对应的变量的时候，只会修改掉接收到请求的进程中的Lua对象值。这个时候就会出现，有的请求返回的值是正确的，有的不正确。</p>
-</li>
-<li><p>在代码缓存是off的时候，每次都会去重新载入代码文件，行为也会存在问题。</p>
-<blockquote>
-<p>所以针对可变的配置内容，不要写在lua文件中，nginx在尝试写入文件的时候，往往都会遇到权限问题，导致不能更新，因此对于动态配置的信息，存储到redis或者其它数据库中。如果实在不想加入数据库。那么可以存储到nginx的共享内存中去。</p>
-</blockquote>
-</li>
-</ol>
-</li>
-<li><p>在Window下ngx.worker.id()的值都是0值。</p>
-<ol>
-<li><p>如果定时任务，只在一个进程中执行即可，如果多个进程会导致多次执行。</p>
-<blockquote>
-<p>第一版本：</p>
-</blockquote>
-</li>
-<li><p>在共享内存中存储pid的标志位，只有第一个设置共享内存的进程执行后续的定时任务。后续的进行运行到此代码的时候，获取pid标志位存在的，就退出，这个也是有毛病的。</p>
-</li>
-<li><p>因为当我们去执行nginx -s reload的时候，共享内存的值是存在的，这个就会导致定时任务后续就不再执行了。</p>
-<blockquote>
-<p>第二版本：</p>
-</blockquote>
-</li>
-<li><p>因为nginx的多个进程启动速度是比较快的。通过设置一个时间到共享内存中。通过判断时间间隔小于5秒的值全部退出掉。</p>
-<blockquote>
-<p>第三版本:</p>
-</blockquote>
-</li>
-<li><p>没有了，如果有希望大神发个邮件给我，在此先感谢了。</p>
-</li>
-</ol>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="/2018/11/02/Lua编译/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ideath@operatorworld.com">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ewkoll">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/02/Lua编译/" itemprop="url">
-                  Lua编译
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-11-02 13:39:02 / 修改时间：14:04:16" itemprop="dateCreated datePublished" datetime="2018-11-02T13:39:02+08:00">2018-11-02</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h3><ul>
-<li><p>下载源码解压，执行make linux</p>
-</li>
-<li><p>提示readline找不到，执行apt-get install libreadline-dev</p>
-<img src="/2018/11/02/Lua编译/libreadline-dev.png">
-</li>
-<li><p>提示ncurses找不到，执行apt-get install libncurses5-dev</p>
-<img src="/2018/11/02/Lua编译/ncurses.png"></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="/2018/10/31/MakeDown竖线转义符号/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ideath@operatorworld.com">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ewkoll">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/31/MakeDown竖线转义符号/" itemprop="url">
-                  MakeDown竖线转义符号
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-10-31 13:54:32 / 修改时间：15:24:44" itemprop="dateCreated datePublished" datetime="2018-10-31T13:54:32+08:00">2018-10-31</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="在通过MakeDown显示表格效果的时候，当内容存在“-”符号，这个时候需要通过-amp-124来进行替换"><a href="#在通过MakeDown显示表格效果的时候，当内容存在“-”符号，这个时候需要通过-amp-124来进行替换" class="headerlink" title="在通过MakeDown显示表格效果的时候，当内容存在“|”符号，这个时候需要通过&amp;#124来进行替换"></a>在通过MakeDown显示表格效果的时候，当内容存在“|”符号，这个时候需要通过<font color="#FF0000" size="3" face="微软雅黑">&amp;#124</font>来进行替换</h3><ul>
-<li>例如：<h4 id="2018-10-31-耗时统计结果"><a href="#2018-10-31-耗时统计结果" class="headerlink" title="2018-10-31 耗时统计结果"></a>2018-10-31 耗时统计结果</h4></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">| 服务名称 | 应用名称 | 类型 | TRACEID | 消耗时间 |</span><br><span class="line">| ------- | ------- | ---- | ------- | ------- |</span><br><span class="line">| /admin_api&amp;#124;app.get_readytask.V2.0 | container_01 | http | 0AC93E771539590210225000606AC0 | 323 |</span><br><span class="line">| /admin_api&amp;#124;app.get_readytask.V2.0 | container_01 | http | 0AC93E771539590210225000606AC0 | 323 |</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="/2018/10/31/Foxmail密码查看/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ideath@operatorworld.com">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ewkoll">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/31/Foxmail密码查看/" itemprop="url">
-                  Foxmail密码查看
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-10-31 13:43:39 / 修改时间：14:06:58" itemprop="dateCreated datePublished" datetime="2018-10-31T13:43:39+08:00">2018-10-31</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Foxmail忘记密码"><a href="#Foxmail忘记密码" class="headerlink" title="Foxmail忘记密码"></a>Foxmail忘记密码</h3><p>Foxmail的密码文件存储于Foxmail 7.2\Storage\用户目录\Accounts下面，内部的是加密的，找些星号查看工具来看比较麻烦的。</p>
-<ul>
-<li><p>后面发现这个东西也是很坑，只需要通过WireShark就可以看到明文密码。</p>
-  <img src="/2018/10/31/Foxmail密码查看/Foxmail_passwd.png">
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1995,7 +2232,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-count">19</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2039,7 +2276,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright"> &copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

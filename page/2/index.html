@@ -279,6 +279,1115 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="/2018/11/26/ES常见问题/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ideath@operatorworld.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ewkoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/26/ES常见问题/" itemprop="url">
+                  ES常见问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-26 11:07:10 / 修改时间：11:16:11" itemprop="dateCreated datePublished" datetime="2018-11-26T11:07:10+08:00">2018-11-26</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ul>
+<li><p>ES写入数据可能会出现FORBIDDEN/12/index read-only / allow delete (api)]错误</p>
+  <img src="/2018/11/26/ES常见问题/es.png">
+<p>  <a href="https://discuss.elastic.co/t/forbidden-12-index-read-only-allow-delete-api/110282/3" target="_blank" rel="noopener">相关链接</a></p>
+<p>  这个问题是因为ES的存储空间不够，导致写入数据失败。</p>
+<p>  1、调整存储的磁盘空间。然后重启ES程序。</p>
+<p>  2、执行以下代码。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PUT _settings</span><br><span class="line">&#123;</span><br><span class="line">    &quot;index&quot;: &#123;</span><br><span class="line">        &quot;blocks&quot;: &#123;</span><br><span class="line">        &quot;read_only_allow_delete&quot;: &quot;false&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="/2018/11/12/Hadoop常见异常/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ideath@operatorworld.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ewkoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/12/Hadoop常见异常/" itemprop="url">
+                  Hadoop常见异常
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-12 09:50:52" itemprop="dateCreated datePublished" datetime="2018-11-12T09:50:52+08:00">2018-11-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-11-29 14:18:33" itemprop="dateModified" datetime="2018-11-29T14:18:33+08:00">2018-11-29</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="服务器异常断电的情况下，重启Hadoop会提示块异常进入安全模式。"><a href="#服务器异常断电的情况下，重启Hadoop会提示块异常进入安全模式。" class="headerlink" title="服务器异常断电的情况下，重启Hadoop会提示块异常进入安全模式。"></a>服务器异常断电的情况下，重启Hadoop会提示块异常进入安全模式。</h3><ol>
+<li><p>先执行 hdfs dfsadmin -safemode leave 退出安全模式。</p>
+</li>
+<li><p>后执行 hdfs fsck /logminer/checkpoint/172.17.0.4_12a69c556cad 查看损坏的块。</p>
+</li>
+<li><p>后执行 hdfs fsck -delete /logminer/checkpoint/172.17.0.4_12a69c556cad 对应的块数据。</p>
+</li>
+</ol>
+<h3 id="意外删除副本机器上的Hadoop数据目录解决版本"><a href="#意外删除副本机器上的Hadoop数据目录解决版本" class="headerlink" title="意外删除副本机器上的Hadoop数据目录解决版本"></a>意外删除副本机器上的Hadoop数据目录解决版本</h3><ol>
+<li><p>先从正常的机器拷贝Datanode节点数据到删除的副本机器上。</p>
+</li>
+<li><p>停止在直接启动集群，会出现以下错误。</p>
+ <img src="/2018/11/12/Hadoop常见异常/storageid_error.png">
+</li>
+<li><p>修改/home/hadoop/data/dfs/datanode/current/VERSION文件的datanodeUuid，只要改一位就可以。</p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="/2018/11/08/GO加密模块/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ideath@operatorworld.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ewkoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/08/GO加密模块/" itemprop="url">
+                  GO加密模块
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-08 15:40:29 / 修改时间：18:43:18" itemprop="dateCreated datePublished" datetime="2018-11-08T15:40:29+08:00">2018-11-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="常见模块"><a href="#常见模块" class="headerlink" title="常见模块"></a>常见模块</h2><h3 id="Keyed-Hash-Message-Authentication-Code-密钥哈希消息认证码"><a href="#Keyed-Hash-Message-Authentication-Code-密钥哈希消息认证码" class="headerlink" title="Keyed-Hash Message Authentication Code 密钥哈希消息认证码"></a>Keyed-Hash Message Authentication Code 密钥哈希消息认证码</h3><ul>
+<li><p>HMac 使用密钥对消息签名的算法。</p>
+<p>  这个算法，就是在计算哈希的时候，嵌入一个密钥，对MD5,SHA算法都有用，本质上这个算法，就是提供一个SHA(message + salt)的通用计算公式。</p>
+</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">hmacSign</span><span class="params">(key <span class="keyword">string</span>, message <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    mac := hmac.New(md5.New, []<span class="keyword">byte</span>(key))</span><br><span class="line">    mac.Write([]<span class="keyword">byte</span>(message))</span><br><span class="line">    expectedMAC := mac.Sum(<span class="literal">nil</span>)</span><br><span class="line">    fmt.Println(hex.EncodeToString(expectedMAC))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="哈希计算-MD5"><a href="#哈希计算-MD5" class="headerlink" title="哈希计算 MD5"></a>哈希计算 MD5</h3><ul>
+<li>这个没什么说的，不建议使用的方法。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 计算字符串MD5</span></span><br><span class="line">data := []<span class="keyword">byte</span>(<span class="string">"These pretzels are making me thirsty."</span>)</span><br><span class="line">fmt.Printf(<span class="string">"%x"</span>, md5.Sum(data))</span><br><span class="line"></span><br><span class="line"><span class="comment">// 计算字符串MD5</span></span><br><span class="line">h := md5.New()</span><br><span class="line">h.Write([]<span class="keyword">byte</span>(<span class="string">"These pretzels are making me thirsty."</span>))</span><br><span class="line">io.WriteString(h, <span class="string">"The fog is getting thicker!"</span>)</span><br><span class="line">io.WriteString(h, <span class="string">"And Leon's getting laaarger!"</span>)</span><br><span class="line">fmt.Printf(<span class="string">"%x"</span>, h.Sum(<span class="literal">nil</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">// 计算文件MD5</span></span><br><span class="line">f, err := os.Open(<span class="string">"file.txt"</span>)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">defer</span> f.Close()</span><br><span class="line">h := md5.New()</span><br><span class="line"><span class="keyword">if</span> _, err := io.Copy(h, f); err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Printf(<span class="string">"%x"</span>, h.Sum(<span class="literal">nil</span>))</span><br></pre></td></tr></table></figure>
+<h3 id="随机数生成-rand"><a href="#随机数生成-rand" class="headerlink" title="随机数生成 rand"></a>随机数生成 rand</h3><ul>
+<li><p>在Linux上使用<a href="http://man7.org/linux/man-pages/man2/getrandom.2.html" target="_blank" rel="noopener">getrandom(2)</a> 否则从/dev/urandom获取。</p>
+</li>
+<li><p>By default, getrandom() draws entropy from the urandom source (i.e.,<br> the same source as the /dev/urandom device).  This behavior can be<br> changed via the flags argument.</p>
+</li>
+<li><p>OpenBSD 使用getentropy(2)</p>
+</li>
+<li><p>其它Unix-like systems从/dev/urandom生成</p>
+</li>
+<li><p>Windows上使用CryptGenRandom API生成</p>
+</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nonce := <span class="built_in">make</span>([]<span class="keyword">byte</span>, <span class="number">12</span>)</span><br><span class="line">io.ReadFull(rand.Reader, nonce)</span><br><span class="line"></span><br><span class="line">rand.Read(b)<span class="comment">//此方法等价于上面的调用。</span></span><br></pre></td></tr></table></figure>
+<h3 id="块加密算法-rc4"><a href="#块加密算法-rc4" class="headerlink" title="块加密算法 rc4"></a>块加密算法 rc4</h3><ul>
+<li>不安全的加密算法，不建议使用，这个是加密算法最早用在流式加密中。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ciper, err := rc4.NewCipher([]<span class="keyword">byte</span>(<span class="string">"HelloWorld"</span>))</span><br><span class="line"><span class="keyword">if</span> <span class="literal">nil</span> != err &#123;</span><br><span class="line">    <span class="built_in">panic</span>(err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">plaintext := <span class="string">"RC4AAAAAAAAAA"</span></span><br><span class="line">buffer := <span class="built_in">make</span>([]<span class="keyword">byte</span>, <span class="built_in">len</span>(plaintext))</span><br><span class="line">ciper.XORKeyStream(buffer, []<span class="keyword">byte</span>(plaintext))</span><br><span class="line">fmt.Println(buffer)</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="/2018/11/02/关于Openresty的一些事情/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ideath@operatorworld.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ewkoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/02/关于Openresty的一些事情/" itemprop="url">
+                  关于Openresty的一些事情
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-02 17:46:30 / 修改时间：18:24:44" itemprop="dateCreated datePublished" datetime="2018-11-02T17:46:30+08:00">2018-11-02</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。"><a href="#在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。" class="headerlink" title="在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。"></a>在对Openresty这块理解很初级的时候，写的一些脚本存在的低级错误。</h3><ul>
+<li><p>把一些状态存储在lua的对象中，在收到请求的时候把对象内的值修改。这个操蛋的做法有什么问题？</p>
+<ol>
+<li><p>这么做，当前你只有一个nginx工作进程，并且lua_code_cache on;的时候，居然是可以用的。</p>
+</li>
+<li><p>并且在Window环境下，你会发现大部分情况都是居然可以用的。</p>
+</li>
+<li><p>在多个进程的情况下，你处理请求的进程只是其中一个，在修改对应的变量的时候，只会修改掉接收到请求的进程中的Lua对象值。这个时候就会出现，有的请求返回的值是正确的，有的不正确。</p>
+</li>
+<li><p>在代码缓存是off的时候，每次都会去重新载入代码文件，行为也会存在问题。</p>
+<blockquote>
+<p>所以针对可变的配置内容，不要写在lua文件中，nginx在尝试写入文件的时候，往往都会遇到权限问题，导致不能更新，因此对于动态配置的信息，存储到redis或者其它数据库中。如果实在不想加入数据库。那么可以存储到nginx的共享内存中去。</p>
+</blockquote>
+</li>
+</ol>
+</li>
+<li><p>在Window下ngx.worker.id()的值都是0值。</p>
+<ol>
+<li><p>如果定时任务，只在一个进程中执行即可，如果多个进程会导致多次执行。</p>
+<blockquote>
+<p>第一版本：</p>
+</blockquote>
+</li>
+<li><p>在共享内存中存储pid的标志位，只有第一个设置共享内存的进程执行后续的定时任务。后续的进行运行到此代码的时候，获取pid标志位存在的，就退出，这个也是有毛病的。</p>
+</li>
+<li><p>因为当我们去执行nginx -s reload的时候，共享内存的值是存在的，这个就会导致定时任务后续就不再执行了。</p>
+<blockquote>
+<p>第二版本：</p>
+</blockquote>
+</li>
+<li><p>因为nginx的多个进程启动速度是比较快的。通过设置一个时间到共享内存中。通过判断时间间隔小于5秒的值全部退出掉。</p>
+<blockquote>
+<p>第三版本:</p>
+</blockquote>
+</li>
+<li><p>没有了，如果有希望大神发个邮件给我，在此先感谢了。</p>
+</li>
+</ol>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="/2018/11/02/Lua编译/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ideath@operatorworld.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ewkoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/02/Lua编译/" itemprop="url">
+                  Lua编译
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-02 13:39:02 / 修改时间：14:04:16" itemprop="dateCreated datePublished" datetime="2018-11-02T13:39:02+08:00">2018-11-02</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h3><ul>
+<li><p>下载源码解压，执行make linux</p>
+</li>
+<li><p>提示readline找不到，执行apt-get install libreadline-dev</p>
+<img src="/2018/11/02/Lua编译/libreadline-dev.png">
+</li>
+<li><p>提示ncurses找不到，执行apt-get install libncurses5-dev</p>
+<img src="/2018/11/02/Lua编译/ncurses.png"></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="/2018/10/31/MakeDown竖线转义符号/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ideath@operatorworld.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ewkoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/31/MakeDown竖线转义符号/" itemprop="url">
+                  MakeDown竖线转义符号
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-31 13:54:32 / 修改时间：15:24:44" itemprop="dateCreated datePublished" datetime="2018-10-31T13:54:32+08:00">2018-10-31</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="在通过MakeDown显示表格效果的时候，当内容存在“-”符号，这个时候需要通过-amp-124来进行替换"><a href="#在通过MakeDown显示表格效果的时候，当内容存在“-”符号，这个时候需要通过-amp-124来进行替换" class="headerlink" title="在通过MakeDown显示表格效果的时候，当内容存在“|”符号，这个时候需要通过&amp;#124来进行替换"></a>在通过MakeDown显示表格效果的时候，当内容存在“|”符号，这个时候需要通过<font color="#FF0000" size="3" face="微软雅黑">&amp;#124</font>来进行替换</h3><ul>
+<li>例如：<h4 id="2018-10-31-耗时统计结果"><a href="#2018-10-31-耗时统计结果" class="headerlink" title="2018-10-31 耗时统计结果"></a>2018-10-31 耗时统计结果</h4></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">| 服务名称 | 应用名称 | 类型 | TRACEID | 消耗时间 |</span><br><span class="line">| ------- | ------- | ---- | ------- | ------- |</span><br><span class="line">| /admin_api&amp;#124;app.get_readytask.V2.0 | container_01 | http | 0AC93E771539590210225000606AC0 | 323 |</span><br><span class="line">| /admin_api&amp;#124;app.get_readytask.V2.0 | container_01 | http | 0AC93E771539590210225000606AC0 | 323 |</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="/2018/10/31/Foxmail密码查看/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ideath@operatorworld.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ewkoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/31/Foxmail密码查看/" itemprop="url">
+                  Foxmail密码查看
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-31 13:43:39" itemprop="dateCreated datePublished" datetime="2018-10-31T13:43:39+08:00">2018-10-31</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-25 16:38:50" itemprop="dateModified" datetime="2019-03-25T16:38:50+08:00">2019-03-25</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Foxmail忘记密码"><a href="#Foxmail忘记密码" class="headerlink" title="Foxmail忘记密码"></a>Foxmail忘记密码</h3><p>Foxmail的密码文件存储于Foxmail 7.2\Storage\用户目录\Accounts下面，内部的是加密的，找些星号查看工具来看比较麻烦的。</p>
+<ul>
+<li><p>SMTP服务的认证方式plain那么只需要通过WireShark就可以看到明文密码。</p>
+  <img src="/2018/10/31/Foxmail密码查看/Foxmail_passwd.png">
+</li>
+<li><p>Login认证方式，只是把密码进行Base64编码处理</p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="/2018/10/30/翻译ES-6-4版本/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -769,7 +1878,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-count">19</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -813,7 +1922,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright"> &copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
