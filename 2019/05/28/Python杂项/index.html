@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="常识 Convention __foo__: 这只是一种约定，是Python系统使用不会与用户名冲突的名称的一种方式。 __foo: 这具有实际意义：解释器将此名称替换_classname__foo为确保名称不会与另一个类中的类似名称重叠的方式。 _foo: 这只是一种约定，是程序员指示变量是私有的一种方式（无论在Python中是什么意思）。  12345678910111213141516171">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python杂项">
+<meta property="og:url" content="/2019/05/28/Python杂项/index.html">
+<meta property="og:site_name" content="Ewkoll">
+<meta property="og:description" content="常识 Convention __foo__: 这只是一种约定，是Python系统使用不会与用户名冲突的名称的一种方式。 __foo: 这具有实际意义：解释器将此名称替换_classname__foo为确保名称不会与另一个类中的类似名称重叠的方式。 _foo: 这只是一种约定，是程序员指示变量是私有的一种方式（无论在Python中是什么意思）。  12345678910111213141516171">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-28T11:41:06.856Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python杂项">
+<meta name="twitter:description" content="常识 Convention __foo__: 这只是一种约定，是Python系统使用不会与用户名冲突的名称的一种方式。 __foo: 这具有实际意义：解释器将此名称替换_classname__foo为确保名称不会与另一个类中的类似名称重叠的方式。 _foo: 这只是一种约定，是程序员指示变量是私有的一种方式（无论在Python中是什么意思）。  12345678910111213141516171">
+
+
+
+
+
+
+  <link rel="canonical" href="/2019/05/28/Python杂项/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Python杂项 | Ewkoll</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Ewkoll</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="/2019/05/28/Python杂项/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ideath@operatorworld.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ewkoll">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python杂项
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-28 15:31:28 / 修改时间：19:41:06" itemprop="dateCreated datePublished" datetime="2019-05-28T15:31:28+08:00">2019-05-28</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="常识"><a href="#常识" class="headerlink" title="常识"></a><a href="https://stackoverflow.com/questions/1301346/what-is-the-meaning-of-a-single-and-a-double-underscore-before-an-object-name" target="_blank" rel="noopener">常识</a></h2><blockquote>
+<p>Convention</p>
+<p><code>__foo__</code>: 这只是一种约定，是Python系统使用不会与用户名冲突的名称的一种方式。</p>
+<p><code>__foo</code>: 这具有实际意义：解释器将此名称替换_classname__foo为确保名称不会与另一个类中的类似名称重叠的方式。</p>
+<p><code>_foo</code>: 这只是一种约定，是程序员指示变量是私有的一种方式（无论在Python中是什么意思）。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DoubleLine</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    双下划线的类变量，实例变量会自动转换成_classname__variable的形式。</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    __class_variable = <span class="number">100</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.__instance_variable = <span class="number">101</span></span><br><span class="line">        self.__setattr__(<span class="string">'_DoubleLine__local'</span>, <span class="number">102</span>)</span><br><span class="line">        object.__setattr__(self, <span class="string">'_DoubleLine__local2'</span>, <span class="number">103</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">to_dict</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.__dict__</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">list_all_member</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> name, value <span class="keyword">in</span> vars(self).items():</span><br><span class="line">            print(<span class="string">'%s=%s'</span> % (name, value))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">dir_all_attr_and_func</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> value <span class="keyword">in</span> dir(self):</span><br><span class="line">            print(value)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(self.__local)</span><br><span class="line">        print(self.__local2)</span><br><span class="line">        print(self.__class_variable)</span><br><span class="line">        print(self.__instance_variable)</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            print(self.__localdynamic_add)</span><br><span class="line">            print(self._DoubleLine__local2)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> exception:</span><br><span class="line">            print(exception)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">dl = DoubleLine()</span><br><span class="line">dl._DoubleLine__localdynamic_add = <span class="number">99</span></span><br><span class="line">print(dl.to_dict())</span><br><span class="line"></span><br><span class="line">dl.list_all_member()</span><br><span class="line">dl.dir_all_attr_and_func()</span><br><span class="line">dl.test()</span><br><span class="line">print(dl._DoubleLine__class_variable)</span><br><span class="line">print(dl._DoubleLine__instance_variable)</span><br><span class="line">print(dl.__instance_variable) <span class="comment"># 异常提示属性不存在。</span></span><br></pre></td></tr></table></figure>
+<h3 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h3><blockquote>
+<p>Py3中原始的线程引用_thread模块。</p>
+<p>local 线程局部变量。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> threading <span class="keyword">import</span> local</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> _thread <span class="keyword">as</span> thread  <span class="comment"># 等于在PY2中的原始线程。</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_time</span><span class="params">(threadName, delay)</span>:</span></span><br><span class="line">    <span class="comment"># 为线程定义一个函数，线程局部变量。</span></span><br><span class="line">    thread_local_data = local()</span><br><span class="line">    thread_local_data.count = <span class="number">0</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> count &lt; <span class="number">5</span>:</span><br><span class="line">        time.sleep(delay)</span><br><span class="line">        count += <span class="number">1</span></span><br><span class="line">        thread_local_data.count += <span class="number">1</span></span><br><span class="line">        print(<span class="string">"%s: %s count: %s"</span> %</span><br><span class="line">              (threadName, time.ctime(time.time()), thread_local_data.count))</span><br><span class="line">    print(<span class="string">"%s: count: %s exit"</span> % (threadName, thread_local_data.count))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">empty_thread</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">"empty_thread"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建三个线程</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    thread.start_new_thread(empty_thread, ())</span><br><span class="line">    thread.start_new_thread(print_time, (<span class="string">"Thread-1"</span>, <span class="number">2</span>))</span><br><span class="line">    thread.start_new_thread(print_time, (<span class="string">"Thread-2"</span>, <span class="number">3</span>))</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    print(<span class="string">"Error: unable to start thread"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="number">1</span>:</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>python 默认参数创建线程后，不管主线程是否执行完毕，都会等待子线程执行完毕才一起退出，有无join结果一样</p>
+<p>如果创建线程，并且设置了daemon为true，及threading.setDaemon(True),则主线程执行完毕后自动退出，不会等待子线程的执行结果。而且随着主线程的退出，子线程也消亡</p>
+<p>join方法的作用是阻塞，等待子线程结束，join方法有一个参数是timeout，即如果主线程等待timeout，子线程还没有结束，则主线程强制结束子线程。</p>
+<p>如果线程daemon属性为False，则join里的timeout参数无效，主线程会一直等待子线程结束。</p>
+<p>如果线程daemon属性为True，则join里的timeout参数是有效的，主线程会等待timeout时间后，结束子线程。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> threading <span class="keyword">import</span> local, Thread</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line">exitFlag = <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TaskThread</span><span class="params">(Thread)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, thread_name, counter, delay)</span>:</span></span><br><span class="line">        Thread.__init__(self)</span><br><span class="line">        self.thread_name = thread_name</span><br><span class="line">        self.counter = counter</span><br><span class="line">        self.delay = delay</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">"Starting "</span> + self.thread_name)</span><br><span class="line">        self.internal_run()</span><br><span class="line">        print(<span class="string">"Exiting "</span> + self.thread_name)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">internal_run</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">global</span> exitFlag</span><br><span class="line">        <span class="keyword">while</span> self.counter:</span><br><span class="line">            <span class="keyword">if</span> exitFlag:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            time.sleep(self.delay)</span><br><span class="line">            print(<span class="string">"%s: %s"</span> % (self.thread_name, time.ctime(time.time())))</span><br><span class="line">            self.counter -= <span class="number">1</span></span><br><span class="line"></span><br><span class="line">threads = []</span><br><span class="line">thread1 = TaskThread(<span class="string">"Thread-1"</span>, <span class="number">5</span>, <span class="number">1</span>)</span><br><span class="line">thread2 = TaskThread(<span class="string">"Thread-2"</span>, <span class="number">5</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">thread1.start()</span><br><span class="line">thread2.start()</span><br><span class="line">threads.append(thread1)</span><br><span class="line">threads.append(thread2)</span><br><span class="line"></span><br><span class="line">time.sleep(<span class="number">3</span>)</span><br><span class="line">exitFlag = <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> threads:</span><br><span class="line">    item.join()</span><br><span class="line">print(<span class="string">"Exit"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">doThreadTest</span><span class="params">(delay)</span>:</span></span><br><span class="line">    print(<span class="string">'start thread time:'</span>, time.strftime(<span class="string">'%H:%M:%S'</span>))</span><br><span class="line">    print(delay)</span><br><span class="line">    time.sleep(delay)</span><br><span class="line">    print(<span class="string">'stop thread time:'</span>, time.strftime(<span class="string">'%H:%M:%S'</span>))</span><br><span class="line"></span><br><span class="line">threads = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">    thread1 = Thread(target=doThreadTest, args=(random.randint(<span class="number">1</span>, <span class="number">5</span>), ))</span><br><span class="line">    <span class="comment"># thread1.setDaemon(True) # 设置后主线程退出，子线程跟随退出。</span></span><br><span class="line">    threads.append(thread1)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> threads:</span><br><span class="line">    t.start()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> threads:</span><br><span class="line">    t.join(<span class="number">1</span>)</span><br><span class="line">print(<span class="string">'stop main thread'</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Ticket</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, count)</span>:</span></span><br><span class="line">        self.ticket = &#123;<span class="string">'ticket'</span>: count&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">check_ticket</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'剩余&#123;&#125;票'</span>.format(self.ticket[<span class="string">'ticket'</span>]))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">deal_ticket</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> self.ticket[<span class="string">'ticket'</span>] &gt; <span class="number">0</span>:</span><br><span class="line">            self.ticket[<span class="string">'ticket'</span>] -= <span class="number">1</span></span><br><span class="line">            print(<span class="string">'%s购票成功'</span> % threading.current_thread().ident)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">'%s购票失败'</span> % threading.current_thread().ident)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">buy_ticket</span><span class="params">(self, locks)</span>:</span></span><br><span class="line">        locks.acquire()</span><br><span class="line">        self.check_ticket()</span><br><span class="line">        self.deal_ticket()</span><br><span class="line">        locks.release()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">locks = threading.Lock()</span><br><span class="line">ticket = Ticket(<span class="number">10</span>)</span><br><span class="line">threads = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">11</span>):</span><br><span class="line">    t = threading.Thread(target=ticket.buy_ticket, args=(locks,))</span><br><span class="line">    t.start()</span><br><span class="line">    threads.append(t)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> threads:</span><br><span class="line">    item.join()</span><br></pre></td></tr></table></figure>
+<h3 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">count = threading.active_count()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(n)</span>:</span></span><br><span class="line">    semaphore.acquire()</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line">    print(<span class="string">'run the thread:%s\n'</span> % n)</span><br><span class="line">    semaphore.release()</span><br><span class="line"></span><br><span class="line">semaphore = threading.BoundedSemaphore(<span class="number">5</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">20</span>):</span><br><span class="line">    threading.Thread(target=run, args=(i,)).start()</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> threading.active_count() != count:</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">'over'</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line">event = threading.Event()</span><br><span class="line">event.set()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Lighter</span><span class="params">()</span>:</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        <span class="keyword">if</span> count &gt; <span class="number">10</span> <span class="keyword">and</span> count &lt; <span class="number">20</span>:</span><br><span class="line">            event.clear()</span><br><span class="line">            print(<span class="string">'Red Light'</span>)</span><br><span class="line">        <span class="keyword">elif</span> count &gt; <span class="number">20</span>:</span><br><span class="line">            count = <span class="number">0</span></span><br><span class="line">            event.set()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">'Green Light'</span>)</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line">        count += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Car</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        <span class="keyword">if</span> event.is_set():</span><br><span class="line">            print(<span class="string">'Running..'</span>)</span><br><span class="line">            time.sleep(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">'Red Light Waitting'</span>)</span><br><span class="line">            event.wait()</span><br><span class="line"></span><br><span class="line">light = threading.Thread(target=Lighter)</span><br><span class="line">car = threading.Thread(target=Car)</span><br><span class="line">light.start()</span><br><span class="line">car.start()</span><br><span class="line">light.join()</span><br></pre></td></tr></table></figure>
+<h3 id="Local、LocalStack、LocalProxy"><a href="#Local、LocalStack、LocalProxy" class="headerlink" title="Local、LocalStack、LocalProxy"></a>Local、LocalStack、LocalProxy</h3>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/27/解决Java字节码加密后Spring和Tomcat运行问题/" rel="next" title="解决Java字节码加密后Spring和Tomcat运行问题">
+                <i class="fa fa-chevron-left"></i> 解决Java字节码加密后Spring和Tomcat运行问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/28/Http杂项/" rel="prev" title="Http杂项">
+                Http杂项 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ideath@operatorworld.com</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#常识"><span class="nav-number">1.</span> <span class="nav-text">常识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#线程"><span class="nav-number">1.1.</span> <span class="nav-text">线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#互斥锁"><span class="nav-number">1.2.</span> <span class="nav-text">互斥锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信号量"><span class="nav-number">1.3.</span> <span class="nav-text">信号量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事件"><span class="nav-number">1.4.</span> <span class="nav-text">事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Local、LocalStack、LocalProxy"><span class="nav-number">1.5.</span> <span class="nav-text">Local、LocalStack、LocalProxy</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ideath@operatorworld.com</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Muse</a> v6.4.2</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
